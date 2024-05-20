@@ -78,16 +78,16 @@ class UserController extends Controller{
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
-    *             type="array",
-    *             @OA\Items(
-    *                 @OA\Property(property="id", type="integer", example=1),
-    *                 @OA\Property(property="name", type="string", example="John Doe"),
-    *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-    *                 @OA\Property(property="id_rol", type="integer", example=1),
-    *                 @OA\Property(property="created_at", type="string", format="date-time"),
-    *                 @OA\Property(property="updated_at", type="string", format="date-time")
-    *             )
-    *         )
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="id_rol", type="integer", example=1),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -170,6 +170,7 @@ class UserController extends Controller{
             ];
             return response()->json($data,404);
         }
+        
         $user->delete();
         $data = [
             "message" => 'users was deleted',
@@ -210,16 +211,16 @@ class UserController extends Controller{
      *         response=200,
      *         description="User updated successfully",
      *         @OA\JsonContent(
-    *             type="array",
-    *             @OA\Items(
-    *                 @OA\Property(property="id", type="integer", example=1),
-    *                 @OA\Property(property="name", type="string", example="John Doe"),
-    *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-    *                 @OA\Property(property="id_rol", type="integer", example=1),
-    *                 @OA\Property(property="created_at", type="string", format="date-time"),
-    *                 @OA\Property(property="updated_at", type="string", format="date-time")
-    *             )
-    *         )
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="id_rol", type="integer", example=1),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,

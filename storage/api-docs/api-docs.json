@@ -20,6 +20,355 @@
         }
     ],
     "paths": {
+        "/api/activities": {
+            "get": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Recuperar todas las actividades",
+                "description": "Devuelve una lista de todas las actividades",
+                "operationId": "18ddabf4129e6b31394d1083a69929cc",
+                "responses": {
+                    "200": {
+                        "description": "Una lista con actividades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Actividades recuperadas exitosamente"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Ver video"
+                                                    },
+                                                    "course_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "video_url": {
+                                                        "type": "string",
+                                                        "example": "www.youtube.com&12343124"
+                                                    },
+                                                    "text": {
+                                                        "type": "string",
+                                                        "example": "Ver video"
+                                                    },
+                                                    "calification": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 10
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "activities not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "activities not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "example": []
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Crear una nueva actividad",
+                "operationId": "6532ef9dfd88219f7a74a53e7bf61a40",
+                "requestBody": {
+                    "description": "Detalles de la actividad",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "course_id",
+                                    "text",
+                                    "calification"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Ver video"
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "video_url": {
+                                        "type": "string",
+                                        "example": "www.youtube.com&12343124"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Ver video"
+                                    },
+                                    "calification": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Actividad creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Ver video"
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "video_url": {
+                                                    "type": "string",
+                                                    "example": "www.youtube.com&12343124"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Ver video"
+                                                },
+                                                "calification": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name_course": [
+                                                    "El campo name_course es requerido"
+                                                ]
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Profesor no encontrado o no es un profesor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Profesor no encontrado o no es un profesor"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error creando la actividad",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error creando la actividad"
+                                        },
+                                        "errors": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/activities/{id}": {
+            "get": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Get activity by ID",
+                "operationId": "efbcc354a27089684b9ee40687bf81a5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the activity to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Ver video"
+                                            },
+                                            "course_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "video_url": {
+                                                "type": "string",
+                                                "example": "www.youtube.com&12343124"
+                                            },
+                                            "text": {
+                                                "type": "string",
+                                                "example": "Ver video"
+                                            },
+                                            "calification": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 10
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -289,13 +638,13 @@
                 }
             }
         },
-        "/api/password-refresh": {
+        "/api/retrieve_password": {
             "post": {
                 "tags": [
                     "authentication"
                 ],
                 "summary": "Refresh user's password",
-                "operationId": "6e63a4e534ae33c2712ba37c0df8e623",
+                "operationId": "478facf448c18e042fba99328d560e83",
                 "requestBody": {
                     "description": "User email",
                     "required": true,
@@ -394,6 +743,100 @@
             }
         },
         "/api/courses": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Retrieve all courses",
+                "description": "Returns a list of all courses",
+                "operationId": "59f700a7ea74f9535b139b44357f0f69",
+                "responses": {
+                    "200": {
+                        "description": "A list with courses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Courses retrieved successfully"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name_course": {
+                                                        "type": "string",
+                                                        "example": "big data"
+                                                    },
+                                                    "teacher_id": {
+                                                        "type": "integer",
+                                                        "example": "2"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "curso big data"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No courses found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Courses not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "courses"
@@ -523,6 +966,563 @@
                                         "status": {
                                             "type": "integer",
                                             "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Delete course by id",
+                "description": "Delete a course by id",
+                "operationId": "0aff7907c338b262c3fae8b4dbc2c31d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the course to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "course not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/courses/{id}": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Retrieve a course by ID",
+                "description": "Returns a single course by ID",
+                "operationId": "acb322def20ff023d264d9786fe407de",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the course to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name_course": {
+                                                        "type": "string",
+                                                        "example": "big data"
+                                                    },
+                                                    "teacher_id": {
+                                                        "type": "integer",
+                                                        "example": "2"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "curso big data"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Course not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Update course by ID",
+                "operationId": "19be0a1c140a39d513e971c66eae2237",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the course to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Course data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name_course": {
+                                        "type": "string",
+                                        "example": "Big Data"
+                                    },
+                                    "teacher_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "New course on PHP"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name_course": {
+                                            "type": "string",
+                                            "example": "Big Data"
+                                        },
+                                        "teacher_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "New course on PHP"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Course not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "teacher not valid"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error updating course",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/courses/teacher/{id}": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Retrieve courses by teacher ID",
+                "description": "Returns a list of courses taught by a specific teacher",
+                "operationId": "92261860fca2c78c743c19f3049d2abf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the teacher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name_course": {
+                                                        "type": "string",
+                                                        "example": "big data"
+                                                    },
+                                                    "teacher_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "curso big data"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Teacher not found or no courses found for the teacher",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Teacher not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/courses/not_teacher": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Retrieve all courses",
+                "description": "Returns a list of all courses whitout teacher",
+                "operationId": "b43a17f6c3417147e7ba5341db6f57ee",
+                "responses": {
+                    "200": {
+                        "description": "A list with courses whitout teacher",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name_course": {
+                                                        "type": "string",
+                                                        "example": "big data"
+                                                    },
+                                                    "teacher_id": {
+                                                        "type": "integer",
+                                                        "example": "2"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "curso big data"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No courses found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No courses without teachers found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "object",
+                                                        "example": []
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"

@@ -189,7 +189,7 @@ class AuthController extends Controller
 
         /**
          * @OA\Post(
-         *     path="/api/password-refresh",
+         *     path="/api/retrieve_password",
          *     summary="Refresh user's password",
          *     tags={"authentication"},
          *     @OA\RequestBody(

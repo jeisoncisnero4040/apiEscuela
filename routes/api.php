@@ -1,5 +1,6 @@
 <?php
 
+ 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,26 +18,31 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Middleware\AdminCheck;
 
-
-
-Route::middleware('auth:sanctum')->get('/usuario', function (Request $request) {
-    return $request->user();
-});
 
 
 Route::post('/users', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/login',[AuthController::class,'login']);
-
+Route::post('/retrieve_password',[AuthController::class,'passwordRefresh']);
 
 Route::get('/users',[UserController::class,'get_users'])
 ->middleware(AdminCheck::class);
-Route::get('users/{id}', [UserController::class, 'getUser'])->where('id', '\d+');
-Route::patch('users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
+Route::get('/users/{id}', [UserController::class, 'getUser'])->where('id', '\d+');
+Route::patch('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
 
 Route::post('/courses' ,[CourseController::class, 'createCourse']);
+Route::get('/courses',[CourseController::class, 'getAllCourses']);
+Route::get('/courses/{id}', [CourseController::class, 'getCourseById'])->where('id', '\d+');
+Route::get('/courses/teacher/{id}', [CourseController::class, 'getCoursesByTeacherId'])->where('id', '\d+');
+Route::get('/courses/not_teacher/', [CourseController::class, 'getCoursesWithNullTeacher']);
+Route::delete('/courses/{id}', [CourseController::class, 'deleteCourse'])->where('id', '\d+');
+Route::patch('/courses/{id}', [CourseController::class, 'updateCourseById'])->where('id', '\d+');
 
+Route::post('/activities',[ActivityController::class, 'createActivity']);
+Route::get('/activities',[ActivityController::class, 'getAllActivities']);
+Route::get('/courses/activities/{id}', [ActivityController::class, 'getActivityById'])->where('id', '\d+');
 
 
