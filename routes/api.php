@@ -19,6 +19,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\StudentController;
+
 use App\Http\Middleware\AdminCheck;
 
 
@@ -31,6 +33,7 @@ Route::post('/retrieve_password',[AuthController::class,'passwordRefresh']);
 Route::get('/users',[UserController::class,'get_users'])
 ->middleware(AdminCheck::class);
 Route::get('/users/{id}', [UserController::class, 'getUser'])->where('id', '\d+');
+Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->where('id', '\d+');
 Route::patch('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
 
 Route::post('/courses' ,[CourseController::class, 'createCourse']);
@@ -43,6 +46,9 @@ Route::patch('/courses/{id}', [CourseController::class, 'updateCourseById'])->wh
 
 Route::post('/activities',[ActivityController::class, 'createActivity']);
 Route::get('/activities',[ActivityController::class, 'getAllActivities']);
-Route::get('/courses/activities/{id}', [ActivityController::class, 'getActivityById'])->where('id', '\d+');
+Route::get('/activities/{id}', [ActivityController::class, 'getActivityById'])->where('id', '\d+');
+Route::get('/activities/course/{id}', [ActivityController::class, 'getActivitiesByCourseId'])->where('id', '\d+');
+Route::delete('/activities/{id}', [ActivityController::class, 'deleteActivityById'])->where('id', '\d+');
+Route::patch('/activities/{id}', [ActivityController::class, 'updateActivityById'])->where('id', '\d+');
 
-
+Route::post('/students',[StudentController::class, 'createStudent']);
