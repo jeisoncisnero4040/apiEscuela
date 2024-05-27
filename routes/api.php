@@ -52,3 +52,7 @@ Route::delete('/activities/{id}', [ActivityController::class, 'deleteActivityByI
 Route::patch('/activities/{id}', [ActivityController::class, 'updateActivityById'])->where('id', '\d+');
 
 Route::post('/students',[StudentController::class, 'createStudent']);
+Route::get('/students',[StudentController::class, 'getAllActiviesStudents']);
+Route::get('/students/{id}',[StudentController::class,'getStudentById'])->where('id','\d+');
+Route::get('/students/courses/{id}',[StudentController::class,'getStudentsByCourrseId'])->where('id','\d+');
+Route::delete('/students/{id}',[StudentController::class,'deleteStudentById'])->where('id','\d+');

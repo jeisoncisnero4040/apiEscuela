@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('video_url')->nullable();
             $table->string('text');
-            $table->float('calification');
+            $table->float('type');
             $table->timestamps();
         });
     }

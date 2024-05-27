@@ -81,7 +81,8 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'id_rol' => 'required',
-            'password' => 'required',
+            'password' => 'required|min:8',
+            'image_url'=>'nullable|url'
         ]);
 
         if ($validator->fails()) {

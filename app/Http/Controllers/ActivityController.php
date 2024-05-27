@@ -39,7 +39,7 @@ class ActivityController extends Controller{
      *                 @OA\Property(property="course_id", type="integer", example=1),
      *                 @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
      *                 @OA\Property(property="text", type="string", example="Ver video"),
-     *                 @OA\Property(property="calification", type="float", example=10.0)
+     *                 @OA\Property(property="type", type="float", example=examen)
      *             )
      *         )
      *     ),
@@ -81,7 +81,7 @@ class ActivityController extends Controller{
             'name' => 'required|string',
             'video_url' => 'nullable|string|url',
             'text' => 'required|string',
-            'calification' => 'required|numeric|min:0|max:10',
+            'type' => 'required|string',
         ]);
 
        
@@ -233,7 +233,7 @@ class ActivityController extends Controller{
      *               @OA\Property(property="course_id", type="integer", example=1),
      *               @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
      *               @OA\Property(property="text", type="string", example="Ver video"),
-     *               @OA\Property(property="calification", type="float", example=10.0)
+     *               @OA\Property(property="type", type="string", example="examen")
      *             )
      *         )
      *     ),

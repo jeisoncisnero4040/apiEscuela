@@ -48,7 +48,7 @@ class StudentControllerTest extends TestCase
 public function it_returns_error_if_student_already_exists()
 {
     // Create a user and a course
-    $user = Usermodel::factory()->create();
+    $user = Usermodel::factory()->create(['id_rol' => 3]);
     $course = CourseModel::factory()->create();
 
    
@@ -74,4 +74,25 @@ public function it_returns_error_if_student_already_exists()
                  'data' => []
              ]);
 }
+    public function it_returns_error_if_user_isnot_student(){
+        $user = Usermodel::factory()->create(['id_rol' => 2]); 
+        $course=CourseModel::factory()->create();
+
+        $data = [
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+        ];
+
+        
+        $response = $this->postJson('/api/students', $data);
+        $response->assertStatus(404)
+        ->assertJson( [
+            'message' => 'failed',
+            'error' =>'estudent not found',
+            'status' => 404,
+            'data' => []
+        ]);
+
+        
+    }
 }
