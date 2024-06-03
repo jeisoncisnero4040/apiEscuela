@@ -99,7 +99,8 @@ class AuthController extends Controller
                 'data' => []
             ], 400);
         }
-    
+
+        
         try {
             
             $imageManager = new ImageManager($request->file('image'));
@@ -124,7 +125,7 @@ class AuthController extends Controller
             'message' => 'success',
             'status' => 201,
             'data' => [
-                'user' => $user,
+                'user' => $user,    
                 'token' => $accessToken
             ],
         ];
@@ -136,7 +137,7 @@ class AuthController extends Controller
             'message' => 'Error creating user',
             'error' => $e->getMessage(),
             'status' => 500,
-            'data' => $imagePath
+            'data' => []
         ], 500);
     }
 }
