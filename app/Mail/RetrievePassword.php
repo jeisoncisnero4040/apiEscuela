@@ -42,7 +42,7 @@ class RetrievePassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'retrivePassword',
+            view: 'retrivepassword',
         );
     }
 

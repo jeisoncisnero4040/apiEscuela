@@ -57,16 +57,25 @@
                                                     },
                                                     "video_url": {
                                                         "type": "string",
-                                                        "example": "www.youtube.com&12343124"
+                                                        "example": "https://www.youtube.com/watch?v=12343124"
                                                     },
-                                                    "text": {
+                                                    "description": {
                                                         "type": "string",
                                                         "example": "Ver video"
                                                     },
-                                                    "calification": {
-                                                        "type": "number",
-                                                        "format": "float",
-                                                        "example": 10
+                                                    "activity_type": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-06-01T12:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-06-01T12:00:00Z"
                                                     }
                                                 },
                                                 "type": "object"
@@ -120,32 +129,36 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name",
                                     "course_id",
-                                    "text",
-                                    "calification"
+                                    "name",
+                                    "description",
+                                    "type_id"
                                 ],
                                 "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Ver video"
-                                    },
                                     "course_id": {
+                                        "description": "ID del curso",
                                         "type": "integer",
                                         "example": 1
                                     },
-                                    "video_url": {
-                                        "type": "string",
-                                        "example": "www.youtube.com&12343124"
-                                    },
-                                    "text": {
+                                    "name": {
+                                        "description": "Nombre de la actividad",
                                         "type": "string",
                                         "example": "Ver video"
                                     },
-                                    "calification": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 10
+                                    "video_url": {
+                                        "description": "URL del video",
+                                        "type": "string",
+                                        "example": "https://www.youtube.com/watch?v=12343124"
+                                    },
+                                    "description": {
+                                        "description": "Descripción de la actividad",
+                                        "type": "string",
+                                        "example": "Ver video"
+                                    },
+                                    "type_id": {
+                                        "description": "ID del tipo de actividad",
+                                        "type": "integer",
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -155,7 +168,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Actividad creada exitosamente",
+                        "description": "activity created successfull",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -170,26 +183,25 @@
                                         },
                                         "data": {
                                             "properties": {
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Ver video"
-                                                },
                                                 "course_id": {
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "video_url": {
-                                                    "type": "string",
-                                                    "example": "www.youtube.com&12343124"
-                                                },
-                                                "text": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Ver video"
                                                 },
-                                                "calification": {
-                                                    "type": "number",
-                                                    "format": "float",
-                                                    "example": 10
+                                                "video_url": {
+                                                    "type": "string",
+                                                    "example": "https://www.youtube.com/watch?v=12343124"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Ver video"
+                                                },
+                                                "type_id": {
+                                                    "type": "integer",
+                                                    "example": 1
                                                 }
                                             },
                                             "type": "object"
@@ -210,13 +222,9 @@
                                             "type": "string",
                                             "example": "error"
                                         },
-                                        "errors": {
+                                        "error": {
                                             "type": "object",
-                                            "example": {
-                                                "name_course": [
-                                                    "El campo name_course es requerido"
-                                                ]
-                                            }
+                                            "example": "bad request"
                                         },
                                         "status": {
                                             "type": "integer",
@@ -233,7 +241,7 @@
                         }
                     },
                     "404": {
-                        "description": "Profesor no encontrado o no es un profesor",
+                        "description": "Curso no encontrado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -244,11 +252,15 @@
                                         },
                                         "error": {
                                             "type": "string",
-                                            "example": "Profesor no encontrado o no es un profesor"
+                                            "example": "course not found"
                                         },
                                         "status": {
                                             "type": "integer",
                                             "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
                                         }
                                     },
                                     "type": "object"
@@ -264,14 +276,19 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Error creando la actividad"
+                                            "example": "error"
                                         },
-                                        "errors": {
-                                            "type": "string"
+                                        "error": {
+                                            "type": "string",
+                                            "example": "internal server error"
                                         },
                                         "status": {
                                             "type": "integer",
                                             "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
                                         }
                                     },
                                     "type": "object"
@@ -320,16 +337,25 @@
                                             },
                                             "video_url": {
                                                 "type": "string",
-                                                "example": "www.youtube.com&12343124"
+                                                "example": "https://www.youtube.com/watch?v=12343124"
                                             },
-                                            "text": {
+                                            "description": {
                                                 "type": "string",
                                                 "example": "Ver video"
                                             },
-                                            "calification": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 10
+                                            "activity_type": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-06-01T12:00:00Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-06-01T12:00:00Z"
                                             }
                                         },
                                         "type": "object"
@@ -594,16 +620,25 @@
                                                     },
                                                     "video_url": {
                                                         "type": "string",
-                                                        "example": "www.youtube.com&12343124"
+                                                        "example": "https://www.youtube.com/watch?v=12343124"
                                                     },
-                                                    "text": {
+                                                    "description": {
                                                         "type": "string",
                                                         "example": "Ver video"
                                                     },
-                                                    "calification": {
-                                                        "type": "number",
-                                                        "format": "float",
-                                                        "example": 10
+                                                    "activity_type": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-06-01T12:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-06-01T12:00:00Z"
                                                     }
                                                 },
                                                 "type": "object"
@@ -790,6 +825,10 @@
                                                 "type": "integer",
                                                 "example": 1
                                             },
+                                            "image_url": {
+                                                "type": "string",
+                                                "example": "https://cloudinary?v237&"
+                                            },
                                             "created_at": {
                                                 "type": "string",
                                                 "format": "date-time"
@@ -875,7 +914,37 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "john@example.com"
+                                        },
+                                        "id_rol": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "password": {
+                                            "type": "string",
+                                            "example": "password123"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://cloudfare?media01"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
                         "description": "Validation error",
@@ -911,7 +980,7 @@
                                             "type": "string",
                                             "example": "Error creating user"
                                         },
-                                        "errors": {
+                                        "error": {
                                             "type": "object",
                                             "example": [
                                                 "error message"
@@ -1173,6 +1242,10 @@
                                                         "type": "string",
                                                         "example": "curso big data"
                                                     },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": "hhttps://cludibary?v354343"
+                                                    },
                                                     "created_at": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -1254,6 +1327,10 @@
                                     "description": {
                                         "type": "string",
                                         "example": "Course Description"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "cloudfire?v=73we"
                                     }
                                 },
                                 "type": "object"
@@ -1772,6 +1849,10 @@
                                                         "type": "string",
                                                         "example": "curso big data"
                                                     },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": "hhttps://cludibary?v354343"
+                                                    },
                                                     "created_at": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -1868,6 +1949,10 @@
                                                         "type": "string",
                                                         "example": "curso big data"
                                                     },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": "hhttps://cludibary?v354343"
+                                                    },
                                                     "created_at": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -1911,6 +1996,152 @@
                                                 },
                                                 "type": "object"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/courses/{id}/change_image": {
+            "post": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Change the course's image",
+                "operationId": "09f1166576c5710a18c92283c0e6a892",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "https://cloudinary?v237&"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user not found"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
                                         }
                                     },
                                     "type": "object"
@@ -2374,14 +2605,14 @@
                 }
             }
         },
-        "/api/courses/{id}/students": {
+        "/api/students/courses/{id}": {
             "get": {
                 "tags": [
                     "students"
                 ],
                 "summary": "Retrieve all students by course ID",
                 "description": "Retrieve all students enrolled in a specific course by the course ID",
-                "operationId": "30161b0d70a8cefac67ada7acad748b4",
+                "operationId": "bec7b596d492117b8d11724c5dc40ee8",
                 "parameters": [
                     {
                         "name": "id",
@@ -2522,6 +2753,10 @@
                                                 "type": "integer",
                                                 "example": 1
                                             },
+                                            "image_url": {
+                                                "type": "string",
+                                                "example": "hhtps://coudnary/v?qdsj"
+                                            },
                                             "created_at": {
                                                 "type": "string",
                                                 "format": "date-time"
@@ -2563,77 +2798,12 @@
                     }
                 }
             },
-            "delete": {
-                "tags": [
-                    "users"
-                ],
-                "summary": "Delete user by ID",
-                "operationId": "a0ce91d753f85c9a3caee8c136d70e4c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the user to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "status": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "User not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "error"
-                                        },
-                                        "status": {
-                                            "type": "integer",
-                                            "example": 404
-                                        },
-                                        "errors": {
-                                            "type": "string",
-                                            "example": "User not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "patch": {
+            "post": {
                 "tags": [
                     "users"
                 ],
                 "summary": "Update user by ID",
-                "operationId": "100bd2ffef773a9af2838f30838e4afb",
+                "operationId": "e588960cc60102d25daf000dd7b75113",
                 "parameters": [
                     {
                         "name": "id",
@@ -2759,6 +2929,217 @@
                                         "errors": {
                                             "type": "string",
                                             "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user by ID",
+                "operationId": "a0ce91d753f85c9a3caee8c136d70e4c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}/change_image": {
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Change the user's image",
+                "operationId": "f0ac80b3cf0a12912817aa6c0b5c9ac2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "https://cloudinary?v237&"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user not found"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {}
                                         }
                                     },
                                     "type": "object"

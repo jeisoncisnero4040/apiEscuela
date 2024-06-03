@@ -5,17 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ActivityModel extends Model
+class AdviceModel extends Model
 {
     use HasFactory;
-    protected $table ="activities";
+    protected $table='images';
     protected $fillable=[
-        "course_id",
-        "name",
-        "video_url",
-        "description",
-        "type_id",
-
-        
+        'text',
     ];
 }

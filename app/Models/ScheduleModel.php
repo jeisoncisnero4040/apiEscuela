@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ActivityModel extends Model
+class ScheduleModel extends Model
 {
     use HasFactory;
-    protected $table ="activities";
+    protected $table='schedule';
     protected $fillable=[
-        "course_id",
-        "name",
-        "video_url",
-        "description",
-        "type_id",
-
-        
+        'activity_id',
+        'day',
+        'star_hour',
+        'end_hour'
     ];
+
 }

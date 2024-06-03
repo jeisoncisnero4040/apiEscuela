@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RolModel extends Model
 {
     use HasFactory;
-    use HasFactory;
+    
     protected $table='rols';
     protected $fillable=[
         'description'

@@ -5,6 +5,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Models\Usermodel;
 use App\Models\CourseModel;
+use App\Helpers\ImageManager;
 
  
 class CourseController extends Controller{
@@ -21,7 +22,8 @@ class CourseController extends Controller{
      *             required={"name_course", "teacher_id", "description"},
      *             @OA\Property(property="name_course", type="string", example="Course Name"),
      *             @OA\Property(property="teacher_id", type="integer", example=1),
-     *             @OA\Property(property="description", type="string", example="Course Description")
+     *             @OA\Property(property="description", type="string", example="Course Description"),
+     *             @OA\Property(property="image_url", type="string", example="cloudfire?v=73we")
      *         )
      *     ),
      *     @OA\Response(
@@ -69,9 +71,10 @@ class CourseController extends Controller{
 
     public function createCourse(Request $request){
         $validator = Validator::make($request->all(), [
-            'name_course' => 'required',
+            'name' => 'required',
             'teacher_id' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +88,7 @@ class CourseController extends Controller{
         }
 
         $user = Usermodel::find($request->input('teacher_id'));
-        if (!$user || $user->id_rol!= 2) {
+        if (!$user || $user->rol_id!= 2) {
             $response = [
                 'message' => 'error',
                 'error' => 'teacher not found or not a teacher',
@@ -96,10 +99,15 @@ class CourseController extends Controller{
         }
 
         try {
+
+            $imageManager = new ImageManager($request->file('image'));
+            $imagePath = $imageManager->saveImage();
+            
             $course = CourseModel::create([
-                'name_course' => $request->input('name_course'),
+                'name' => $request->input('name'),
                 'teacher_id' => $request->input('teacher_id'),
                 'description' => $request->input('description'),
+                'image_url'=>$imagePath,
             ]);
 
             $response = [
@@ -148,6 +156,7 @@ class CourseController extends Controller{
      *                 @OA\Property(property="name_course", type="string", example="big data"),
      *                 @OA\Property(property="teacher_id", type="integer",   example="2"),
      *                 @OA\Property(property="description", type="string", example="curso big data"),
+     *                 @OA\Property(property="image_url", type="string", example="hhttps://cludibary?v354343"),
      *                 @OA\Property(property="created_at", type="string", format="date-time"),
      *                 @OA\Property(property="updated_at", type="string", format="date-time")
      *             )
@@ -324,6 +333,7 @@ class CourseController extends Controller{
      *                     @OA\Property(property="name_course", type="string", example="big data"),
      *                     @OA\Property(property="teacher_id", type="integer", example=2),
      *                     @OA\Property(property="description", type="string", example="curso big data"),
+     *                     @OA\Property(property="image_url", type="string", example="hhttps://cludibary?v354343"),
      *                     @OA\Property(property="created_at", type="string", format="date-time"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time")
      *                 )
@@ -359,7 +369,7 @@ class CourseController extends Controller{
 
     public function getCoursesByTeacherId($id){
         $teacher=Usermodel::find($id);
-        if(!$teacher || $teacher->id_rol !=2){
+        if(!$teacher || $teacher->rol_id !=2){
             $response=[
                 'message'=>'teacher not found',
                 'status'=>404,
@@ -414,6 +424,7 @@ class CourseController extends Controller{
      *                 @OA\Property(property="name_course", type="string", example="big data"),
      *                 @OA\Property(property="teacher_id", type="integer",   example="2"),
      *                 @OA\Property(property="description", type="string", example="curso big data"),
+     *                 @OA\Property(property="image_url", type="string", example="hhttps://cludibary?v354343"),
      *                 @OA\Property(property="created_at", type="string", format="date-time"),
      *                 @OA\Property(property="updated_at", type="string", format="date-time")
      *             )
@@ -696,6 +707,121 @@ class CourseController extends Controller{
             return response()->json($data, 500);
         }
     
+    }
+    /**
+     * @OA\Post(
+     *     path="/api/courses/{id}/change_image",
+     *     summary="Change the course's image",
+     *     tags={"courses"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="Course ID"
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="The image file to upload"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="success"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", type="string", example="https://cloudinary?v237&")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="bad request"),
+     *             @OA\Property(property="error", type="object"),
+     *             @OA\Property(property="status", type="integer", example=400),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="user not found"),
+     *             @OA\Property(property="error", type="string", example="User not found"),
+     *             @OA\Property(property="status", type="integer", example=404),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="error"),
+     *             @OA\Property(property="error", type="string", example="Error message"),
+     *             @OA\Property(property="status", type="integer", example=500),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     )
+     * )
+     */
+
+    public function changeImageCourse($id, Request $request) {
+         
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'bad request',
+                'error' => $validator->errors(),
+                'status' => 400,
+                'data' => $request->all()
+            ], 400);
+        }
+
+        $course = CourseModel::find($id);
+        if (!$course) {
+            return response()->json([
+                'message' => 'user not found',
+                'error' => 'User not found',
+                'status' => 404,
+                'data' => []
+            ], 404);
+        }
+
+        try {
+            $imageManager = new ImageManager($request->file('image'));
+            $newUrlImage = $imageManager->changeImage($course->image_url);
+
+            $course->update(['image_url'=>$newUrlImage]);
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $newUrlImage
+            ], 200);
+
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'error',
+                'error' => $e->getMessage(),
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
     }
 }
     

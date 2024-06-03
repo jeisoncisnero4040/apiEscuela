@@ -3,47 +3,49 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Validator;
 use App\Models\Usermodel;
+use Validator;
+use App\Helpers\ImageManager;
 
 
 class UserController extends Controller{
     /**
-         * @OA\Get(
-         *     path="/api/users",
-         *     summary="Get all users",
-         *     tags={"users"},
-         *     @OA\Response(
-         *         response=200,
-         *         description="Successful operation",
-         *         @OA\JsonContent(
-         *             type="array",
-         *             @OA\Items(
-         *                 @OA\Property(property="id", type="integer", example=1),
-         *                 @OA\Property(property="name", type="string", example="John Doe"),
-         *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-         *                 @OA\Property(property="id_rol", type="integer", example=1),
-         *                 @OA\Property(property="created_at", type="string", format="date-time"),
-         *                 @OA\Property(property="updated_at", type="string", format="date-time")
-         *             )
-         *         )
-         *     ),
-         *     @OA\Response(
-         *         response=404,
-         *         description="Data not found",
-         *         @OA\JsonContent(
-         *             @OA\Property(property="message", type="string", example="error"),
-         *             @OA\Property(property="errors", type="string", example="data not found"),
-         *             @OA\Property(property="status", type="integer", example=404)
-         *         )
-         *     )
-         * )
-         */
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Get all users",
+     *     tags={"users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="id_rol", type="integer", example=1),
+     *                 @OA\Property(property="image_url", type="string", example="https://cloudinary?v237&"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Data not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="error"),
+     *             @OA\Property(property="errors", type="string", example="data not found"),
+     *             @OA\Property(property="status", type="integer", example=404)
+     *         )
+     *     )
+     * )
+     */
 
    
     public function get_users(){
 
-        $data = Usermodel::select('id', 'name', 'email', 'id_rol' ,'created_at', 'updated_at')->get();
+        $data = Usermodel::select('id', 'name', 'email', 'rol_id' ,'created_at', 'updated_at','image_url')->get();
 
         if ($data->isEmpty()) {  
             $data = [
@@ -84,6 +86,7 @@ class UserController extends Controller{
      *                 @OA\Property(property="name", type="string", example="John Doe"),
      *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *                 @OA\Property(property="id_rol", type="integer", example=1),
+     *                 @OA\Property(property="image_url", type="string", example="hhtps://coudnary/v?qdsj"),
      *                 @OA\Property(property="created_at", type="string", format="date-time"),
      *                 @OA\Property(property="updated_at", type="string", format="date-time")
      *             )
@@ -109,7 +112,7 @@ class UserController extends Controller{
             $data = [
                 "message" => 'error',
                 'status' => 404,
-                'errors' => 'User not found'
+                'error' => 'User not found'
             ];
             return response()->json($data,404);
         }
@@ -183,7 +186,7 @@ class UserController extends Controller{
         }
     
     /**
-     * @OA\Patch(
+     * @OA\Post(
      *     path="/api/users/{id}",
      *     summary="Update user by ID",
      *     tags={"users"},
@@ -257,7 +260,7 @@ class UserController extends Controller{
             ];
             return response()->json($data, 404);    
         }
-        $userdata=$request->all();
+        $userData=$request->all();
         if ($request->password){
             $userData['password'] = bcrypt($request->password);
         }
@@ -269,7 +272,7 @@ class UserController extends Controller{
             $data = [
                 "message" => 'success',
                 'status' => 200,
-                'data' => $request->all()
+                'data' => $userData
             ];
             
             return response()->json($data, 200);
@@ -282,7 +285,123 @@ class UserController extends Controller{
             return response()->json($data, 500);
         }
     }
+    /**
+     * @OA\Patch(
+     *     path="/api/users/{id}/change_image",
+     *     summary="Change the user's image",
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="User ID"
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="The image file to upload"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="success"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", type="string", example="https://cloudinary?v237&")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="bad request"),
+     *             @OA\Property(property="error", type="object"),
+     *             @OA\Property(property="status", type="integer", example=400),
+     *             @OA\Property(property="data", type="array", @OA\Items())
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="user not found"),
+     *             @OA\Property(property="error", type="string", example="User not found"),
+     *             @OA\Property(property="status", type="integer", example=404),
+     *             @OA\Property(property="data", type="array", @OA\Items())
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="error"),
+     *             @OA\Property(property="error", type="string", example="Error message"),
+     *             @OA\Property(property="status", type="integer", example=500),
+     *             @OA\Property(property="data", type="array", @OA\Items())
+     *         )
+     *     )
+     * )
+     */
+
+
+    public function changeImageUser($id, Request $request) {
+         
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'bad request',
+                'error' => $validator->errors(),
+                'status' => 400,
+                'data' => $request->all()
+            ], 400);
+        }
+
+        $user = Usermodel::find($id);
+        if (!$user) {
+            return response()->json([
+                'message' => 'user not found',
+                'error' => 'User not found',
+                'status' => 404,
+                'data' => []
+            ], 404);
+        }
+
+        try {
+            $imageManager = new ImageManager($request->file('image'));
+            $newUrlImage = $imageManager->changeImage($user->image_url);
+
+            $user->update(['image_url'=>$newUrlImage]);
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $newUrlImage
+            ], 200);
+
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'error',
+                'error' => $e->getMessage(),
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
     }
+}
 
 
 

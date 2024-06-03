@@ -86,7 +86,7 @@ class StudentController extends Controller
             return response()->json($response, 400);
         }
 
-        if (Usermodel::find($request->input('user_id'))->id_rol != 3) {
+        if (Usermodel::find($request->input('user_id'))->rol_id != 3) {
             $response = [
                 'message' => 'failed',
                 'error' => 'student not found',
@@ -217,7 +217,7 @@ class StudentController extends Controller
 
         foreach ($studentsActivies as $student) {
             $infoUser = Usermodel::find($student['user_id']);
-            $infoUser->makeHidden(['password', 'created_at', 'updated_at','id_rol']);
+            $infoUser->makeHidden(['password', 'created_at', 'updated_at','rol_id']);
         
             $infoCourse = CourseModel::find($student['course_id']);
         
@@ -226,7 +226,7 @@ class StudentController extends Controller
                 'user' => $infoUser,
                 'course' => [
                     'id' => $infoCourse->id,
-                    'name_course' => $infoCourse->name_course,
+                    'name_course' => $infoCourse->name,
                 ],
             ];
         
@@ -352,7 +352,7 @@ class StudentController extends Controller
             'user' => $infoUser,
             'course' => [
                 'id' => $infoCourse->id,
-                'name_course' => $infoCourse->name_course,
+                'name_course' => $infoCourse->name,
             ],
         ];
     

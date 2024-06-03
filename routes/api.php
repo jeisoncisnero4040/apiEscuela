@@ -29,12 +29,14 @@ Route::post('/users', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/retrieve_password',[AuthController::class,'passwordRefresh']);
+route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 
-Route::get('/users',[UserController::class,'get_users'])
-->middleware(AdminCheck::class);
+Route::get('/users',[UserController::class,'get_users']);
+//->middleware(AdminCheck::class);
 Route::get('/users/{id}', [UserController::class, 'getUser'])->where('id', '\d+');
 Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->where('id', '\d+');
 Route::patch('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
+Route::post('/users/{id}/change_image',[UserController::class,'changeImageUser'])->where('id', '\d+');
 
 Route::post('/courses' ,[CourseController::class, 'createCourse']);
 Route::get('/courses',[CourseController::class, 'getAllCourses']);
@@ -43,6 +45,7 @@ Route::get('/courses/teacher/{id}', [CourseController::class, 'getCoursesByTeach
 Route::get('/courses/not_teacher/', [CourseController::class, 'getCoursesWithNullTeacher']);
 Route::delete('/courses/{id}', [CourseController::class, 'deleteCourse'])->where('id', '\d+');
 Route::patch('/courses/{id}', [CourseController::class, 'updateCourseById'])->where('id', '\d+');
+Route::post('/courses/{id}/change_image',[CourseController::class,'changeImageCourse'])->where('id', '\d+');
 
 Route::post('/activities',[ActivityController::class, 'createActivity']);
 Route::get('/activities',[ActivityController::class, 'getAllActivities']);

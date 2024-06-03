@@ -27,6 +27,7 @@ class UsermodelFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'id_rol' => RolModel::factory(),
             'password' => bcrypt('password'), 
+            'image_url' => $this->faker->imageUrl()
         ];
     }
 }

@@ -25,7 +25,7 @@ class CourseModelFactory extends Factory
     public function definition()
     {
         return [
-            'name_course' => $this->faker->name,
+            'name' => $this->faker->name,
             'description' => $this->faker->safeEmail,
              
         ];

@@ -18,28 +18,28 @@ class ActivityController extends Controller{
      *         required=true,
      *         description="Detalles de la actividad",
      *         @OA\JsonContent(
-     *             required={"name", "course_id", "text", "calification"},
-     *             @OA\Property(property="name", type="string", example="Ver video"),
-     *             @OA\Property(property="course_id", type="integer", example=1),
-     *             @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
-     *             @OA\Property(property="text", type="string", example="Ver video"),
-     *             @OA\Property(property="calification", type="float", example=10.0)
+     *             required={"course_id", "name", "description", "type_id"},
+     *             @OA\Property(property="course_id", type="integer", example=1, description="ID del curso"),
+     *             @OA\Property(property="name", type="string", example="Ver video", description="Nombre de la actividad"),
+     *             @OA\Property(property="video_url", type="string", example="https://www.youtube.com/watch?v=12343124", description="URL del video"),
+     *             @OA\Property(property="description", type="string", example="Ver video", description="Descripción de la actividad"),
+     *             @OA\Property(property="type_id", type="integer", example=1, description="ID del tipo de actividad")
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Actividad creada exitosamente",
+     *         description="activity created successfull",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="success"),
      *             @OA\Property(property="status", type="integer", example=201),
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(property="name", type="string", example="Ver video"),
      *                 @OA\Property(property="course_id", type="integer", example=1),
-     *                 @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
-     *                 @OA\Property(property="text", type="string", example="Ver video"),
-     *                 @OA\Property(property="type", type="float", example=examen)
+     *                 @OA\Property(property="name", type="string", example="Ver video"),
+     *                 @OA\Property(property="video_url", type="string", example="https://www.youtube.com/watch?v=12343124"),
+     *                 @OA\Property(property="description", type="string", example="Ver video"),
+     *                 @OA\Property(property="type_id", type="integer", example=1)
      *             )
      *         )
      *     ),
@@ -48,27 +48,29 @@ class ActivityController extends Controller{
      *         description="Error de validación",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="error"),
-     *             @OA\Property(property="errors", type="object", example={"name_course":{"El campo name_course es requerido"}}),
+     *             @OA\Property(property="error", type="object", example="bad request"),
      *             @OA\Property(property="status", type="integer", example=400),
      *             @OA\Property(property="data", type="object", example={})
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Profesor no encontrado o no es un profesor",
+     *         description="Curso no encontrado",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="error"),
-     *             @OA\Property(property="error", type="string", example="Profesor no encontrado o no es un profesor"),
-     *             @OA\Property(property="status", type="integer", example=404)
+     *             @OA\Property(property="error", type="string", example="course not found"),
+     *             @OA\Property(property="status", type="integer", example=404),
+     *             @OA\Property(property="data", type="object", example={})
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
      *         description="Error creando la actividad",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Error creando la actividad"),
-     *             @OA\Property(property="errors", type="string"),
-     *             @OA\Property(property="status", type="integer", example=500)
+     *             @OA\Property(property="message", type="string", example="error"),
+     *             @OA\Property(property="error", type="string", example="internal server error"),
+     *             @OA\Property(property="status", type="integer", example=500),
+     *             @OA\Property(property="data", type="object", example={})
      *         )
      *     )
      * )
@@ -79,9 +81,9 @@ class ActivityController extends Controller{
         $validator = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id',
             'name' => 'required|string',
-            'video_url' => 'nullable|string|url',
-            'text' => 'required|string',
-            'type' => 'required|string',
+            'video_url' => 'required|string|url',
+            'description' => 'required|string',
+            'type_id' => 'required|exists:activity_types,id',
         ]);
 
        
@@ -101,8 +103,8 @@ class ActivityController extends Controller{
                 'course_id' => $request->course_id,
                 'name' => $request->name,
                 'video_url' => $request->video_url,
-                'text' => $request->text,
-                'calification' => $request->calification,
+                'description' => $request->description,
+                'type_id' => $request->type_id,
             ]);
 
             $response = [
@@ -150,9 +152,11 @@ class ActivityController extends Controller{
      *                     type="object",
      *                     @OA\Property(property="name", type="string", example="Ver video"),
      *                     @OA\Property(property="course_id", type="integer", example=1),
-     *                     @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
-     *                     @OA\Property(property="text", type="string", example="Ver video"),
-     *                     @OA\Property(property="calification", type="float", example=10.0)
+     *                     @OA\Property(property="video_url", type="string", example="https://www.youtube.com/watch?v=12343124"),
+     *                     @OA\Property(property="description", type="string", example="Ver video"),
+     *                     @OA\Property(property="activity_type", type="integer", example=1),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-06-01T12:00:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-06-01T12:00:00Z")
      *                 )
      *             )
      *         )
@@ -184,6 +188,7 @@ class ActivityController extends Controller{
      *     )
      * )
      */
+
 
     public function getAllActivities(){
         $activities=ActivityModel::all();
@@ -227,14 +232,15 @@ class ActivityController extends Controller{
      *         @OA\JsonContent(
      *             type="array",
      *             @OA\Items(
-     *                 
-     *               type="object",
-     *               @OA\Property(property="name", type="string", example="Ver video"),
-     *               @OA\Property(property="course_id", type="integer", example=1),
-     *               @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
-     *               @OA\Property(property="text", type="string", example="Ver video"),
-     *               @OA\Property(property="type", type="string", example="examen")
-     *             )
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="Ver video"),
+     *                     @OA\Property(property="course_id", type="integer", example=1),
+     *                     @OA\Property(property="video_url", type="string", example="https://www.youtube.com/watch?v=12343124"),
+     *                     @OA\Property(property="description", type="string", example="Ver video"),
+     *                     @OA\Property(property="activity_type", type="integer", example=1),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-06-01T12:00:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-06-01T12:00:00Z")
+     *                 )
      *         )
      *     ),
      *     @OA\Response(
@@ -251,8 +257,8 @@ class ActivityController extends Controller{
      */
     public function getActivityById($id){
 
-        $activities=ActivityModel::all();
-        if($activities->isEmpty()){
+        $activity=ActivityModel::find($id);
+        if(!$activity){
             $response=[
                 'message'=>'error',
                 'error'=>'activity not found',
@@ -266,7 +272,7 @@ class ActivityController extends Controller{
         $response=[
             'message'=>'succes',
             'status'=>200,
-            'data'=>$activities
+            'data'=>$activity
         ];
         return response()->json($response,404);
 
@@ -305,11 +311,14 @@ class ActivityController extends Controller{
      *                 property="data",
      *                 type="array",
      *                 @OA\Items(
-     *               @OA\Property(property="name", type="string", example="Ver video"),
-     *               @OA\Property(property="course_id", type="integer", example=1),
-     *               @OA\Property(property="video_url", type="string", example="www.youtube.com&12343124"),
-     *               @OA\Property(property="text", type="string", example="Ver video"),
-     *               @OA\Property(property="calification", type="float", example=10.0)
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="Ver video"),
+     *                     @OA\Property(property="course_id", type="integer", example=1),
+     *                     @OA\Property(property="video_url", type="string", example="https://www.youtube.com/watch?v=12343124"),
+     *                     @OA\Property(property="description", type="string", example="Ver video"),
+     *                     @OA\Property(property="activity_type", type="integer", example=1),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2023-06-01T12:00:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-06-01T12:00:00Z")
      *                 )
      *             )
      *         )
@@ -371,7 +380,7 @@ class ActivityController extends Controller{
             'status'=>200,
             'data'=>$activities
         ];
-        return response()->json($response,404);
+        return response()->json($response,200);
 
 
     }

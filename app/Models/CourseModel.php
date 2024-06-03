@@ -12,9 +12,10 @@ class CourseModel extends Model
     
     protected $table ="courses";
     protected $fillable=[
-        "name_course",
+        "name",
         "teacher_id",
         "description",
+        "image_url",
         
     ];
 }
