@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Usermodel;
 use Illuminate\Support\Facades\Auth;
@@ -132,14 +132,14 @@ class AuthController extends Controller
         
         
         return response()->json($data, 201)->header('Authorization', 'Bearer ' . $accessToken);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Error creating user',
-            'error' => $e->getMessage(),
-            'status' => 500,
-            'data' => []
-        ], 500);
-    }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error creating user',
+                'error' => $e->getMessage(),
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
 }
         
 
@@ -197,7 +197,7 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
         
             if (Auth::attempt($credentials)) {
-                $user = Auth::user();
+                $user = Auth::Usermodel();
                 $token = $user->createToken('authToken')->plainTextToken;
                 $roles = [
                     1 => "admin",

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedule', function (Blueprint $table) {
+        Schema::create('files_activity', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('activity_id');
             $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('day');
-            $table->dateTime('star_hour');
-            $table->dateTime('end_hour');
+            $table->string('file_url');
+            $table->string('description');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedule');
+        Schema::dropIfExists('files_activity');
     }
 };

@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AdviceModel extends Model
+class CalificationsModel extends Model
 {
     use HasFactory;
-    protected $table='advices';
+    protected $table ='califications';
     protected $fillable=[
-        'text',
-        'image_url'
+        'activity_id',
+        'student_id',
+        'calification'
     ];
 }

@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleModel extends Model
 {
     use HasFactory;
-    protected $table='schedule';
+    protected $table='schedules';
     protected $fillable=[
         'activity_id',
         'day',
-        'star_hour',
-        'end_hour'
+        'start_hour',
+        'end_hour',
+        'teacher_id'
     ];
 
 }

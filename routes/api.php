@@ -1,7 +1,6 @@
 <?php
 
- 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ActivitiescomentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,11 +18,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ActivityFileController;
+use App\Http\Controllers\AdviceController;
+use App\Http\Controllers\CalificationsController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 
 use App\Http\Middleware\AdminCheck;
-
-
+use App\Models\ActivityFileModel;
 
 Route::post('/users', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
@@ -59,3 +61,30 @@ Route::get('/students',[StudentController::class, 'getAllActiviesStudents']);
 Route::get('/students/{id}',[StudentController::class,'getStudentById'])->where('id','\d+');
 Route::get('/students/courses/{id}',[StudentController::class,'getStudentsByCourrseId'])->where('id','\d+');
 Route::delete('/students/{id}',[StudentController::class,'deleteStudentById'])->where('id','\d+');
+
+Route::post('/schedule',[ScheduleController::class,'CreateScheduleForActivity']);
+Route::get('/schedule/teacher/{id}',[ScheduleController::class,'getScheduleForTeacherId'])->where('id','\d+');
+Route::get('/schedule/student/{id}',[ScheduleController::class,'getScheduleByStudentId'])->where('id','\d+');
+Route::get('/schedule/{id}',[ScheduleController::class,'deleteScheduleById'])->where('id','\d+');
+Route::patch('/schedule/{id}',[ScheduleController::class,'updateScheduleById'])->where('id','\d+');
+
+Route::post('/advices',[AdviceController::class,'createAdvice']);
+Route::get('/advices',[AdviceController::class,'getAllAdvices']);
+Route::delete('/advices/{id}',[AdviceController::class,'deleteAdviceById'])->where('id','\d+');
+Route::post('/advices/{id}/change_image',[AdviceController::class,'changeImageFromAdviceById'])->where('id','\d+');
+
+Route::post('/califications',[CalificationsController::class ,'addCalification']);
+Route::get('/califications/{studentId}/activity/{activityId}', [CalificationsController::class, 'getAllCalificationsActivityFromStudent'])
+    ->where('studentId', '\d+')
+    ->where('activityId', '\d+');
+Route::get('/califications/{studentId}/course/{courseId}', [CalificationsController::class, 'getAllCalificationsCourseFromStudent'])
+    ->where('studentId', '\d+')
+    ->where('courseId', '\d+');
+Route::get('/califications/{id}',[CalificationsController::class ,'getCalificationById'])->where('id','\d+');
+Route::delete('/califications/{id}',[CalificationsController::class ,'deleteCalificationById'])->where('id','\d+');
+Route::post('/califications/{id}',[CalificationsController::class ,'updateCalificationById'])->where('id','\d+');
+
+Route::post('/comments',[ActivitiescomentsController::class, 'createComment']);
+Route::get('/comments/activity/{id}',[ActivitiescomentsController::class, 'getAllCommentFromActivityId'])->where('id','\d+');
+
+Route::post('/files_activity',[ActivityFileController::class, 'addFileOrUrlToActivity']);

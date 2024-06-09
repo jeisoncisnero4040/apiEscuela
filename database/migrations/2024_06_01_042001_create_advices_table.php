@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('advices', function (Blueprint $table) {
             $table->id();
             $table->string('text');
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
             $table->timestamps();
         });
     }

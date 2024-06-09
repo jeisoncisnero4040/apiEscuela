@@ -20,6 +20,263 @@
         }
     ],
     "paths": {
+        "/api/comments": {
+            "post": {
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Create a new comment",
+                "description": "Create a new comment for a specific activity by a user.",
+                "operationId": "createComment",
+                "requestBody": {
+                    "description": "Comment data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "activity_id",
+                                    "user_id",
+                                    "comment"
+                                ],
+                                "properties": {
+                                    "activity_id": {
+                                        "description": "ID of the activity",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "user_id": {
+                                        "description": "ID of the user",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "comment": {
+                                        "description": "The comment text",
+                                        "type": "string",
+                                        "example": "This is a comment"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "created"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID of the comment",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "activity_id": {
+                                                    "description": "ID of the activity",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "user_id": {
+                                                    "description": "ID of the user",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "comment": {
+                                                    "description": "The comment text",
+                                                    "type": "string",
+                                                    "example": "This is a comment"
+                                                },
+                                                "created_at": {
+                                                    "description": "Creation timestamp",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-07T12:34:56Z"
+                                                },
+                                                "updated_at": {
+                                                    "description": "Last update timestamp",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-07T12:34:56Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "activity_id is required"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/activity/{id}": {
+            "get": {
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Get all comments for a specific activity",
+                "operationId": "ef39b0987a16a59177c5b03d2158dd21",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the activity",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "comment": {
+                                                        "type": "string",
+                                                        "example": "Great activity!"
+                                                    },
+                                                    "user_name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "rol": {
+                                                        "type": "string",
+                                                        "example": "student"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-06-08T14:12:33Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comments not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "comments not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/activities": {
             "get": {
                 "tags": [
@@ -792,6 +1049,783 @@
                 }
             }
         },
+        "/api/files_activity": {
+            "post": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Add a file or URL to an activity.",
+                "operationId": "251c71208ee6e6fd707da15a6c70204a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "activity_id",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "activity_id": {
+                                        "description": "ID of the activity to which the file or URL will be added.",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "url": {
+                                        "description": "URL of the file to add. This field is optional and can be null.",
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://example.com/file.pdf",
+                                        "nullable": true
+                                    },
+                                    "file": {
+                                        "description": "File to add. This field is optional and can be null. Only provide this if no URL is provided.",
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    },
+                                    "description": {
+                                        "description": "Description of the file to add.",
+                                        "type": "string",
+                                        "example": "Description of the file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The file or URL has been added successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "created"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "activity_id": {
+                                                    "description": "ID of the activity to which the file or URL will be added.",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "url": {
+                                                    "description": "URL of the file to add. This field is optional and can be null.",
+                                                    "type": "string",
+                                                    "format": "url",
+                                                    "example": "https://example.com/file.pdf",
+                                                    "nullable": true
+                                                },
+                                                "description": {
+                                                    "description": "Description of the file to add.",
+                                                    "type": "string",
+                                                    "example": "Description of the file"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to failed validation or business logic error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "description": "Validation or business logic errors.",
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while processing the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "description": "Description of the internal error.",
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/advices": {
+            "get": {
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Get all advices",
+                "description": "Retrieve a list of all advices.",
+                "operationId": "getAllAdvices",
+                "responses": {
+                    "200": {
+                        "description": "Successful response with a list of advices",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "text": {
+                                                        "type": "string",
+                                                        "example": "This is an advice text."
+                                                    },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": "http://example.com/images/advice1.jpg"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-08T05:21:34.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-08T05:21:34.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Advices not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "advices not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Create a new advice",
+                "description": "Create a new advice with optional image upload.",
+                "operationId": "createAdvice",
+                "requestBody": {
+                    "description": "Advice data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "text"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "This is an advice text."
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Advice created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "bienvenidos"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": "https://clodinary?v?123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error creating advice"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/advices/{id}": {
+            "delete": {
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Delete an advice by ID",
+                "description": "Delete a specific advice by its ID.",
+                "operationId": "deleteAdviceById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the advice to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Advice deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Advice not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "advice not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/advices/{Id}": {
+            "patch": {
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Update an advice by ID",
+                "description": "Update a specific advice by its ID.",
+                "operationId": "updateAdviceById",
+                "parameters": [
+                    {
+                        "name": "adviceId",
+                        "in": "path",
+                        "description": "ID of the advice to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Advice data to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Updated advice text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Advice updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "bienvenidos"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": "https://cloudinary?v=123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Advice not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "advice not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/advices/{adviceId}/change_image": {
+            "post": {
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Change the image of an advice by ID",
+                "description": "Update the image of a specific advice by its ID.",
+                "operationId": "changeImageFromAdviceById",
+                "parameters": [
+                    {
+                        "name": "adviceId",
+                        "in": "path",
+                        "description": "ID of the advice to update the image",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "New image for the advice",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "Image file to upload",
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": "https://cloudinary?v=123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Advice not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "advice not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -1189,6 +2223,724 @@
                                         "status": {
                                             "type": "integer",
                                             "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/califications": {
+            "post": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Add a new calification",
+                "description": "Create a new calification for a student in a specific activity.",
+                "operationId": "addCalification",
+                "requestBody": {
+                    "description": "Calification data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "activity_id",
+                                    "student_id",
+                                    "calification"
+                                ],
+                                "properties": {
+                                    "activity_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "calification": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 8.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Calification created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "created"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "activity_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "calification": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 8.5
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/califications/{student_id}/activity/{activity_id}": {
+            "get": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Get all grades for an activity for a student",
+                "operationId": "19a8f3b2c9d046c807069013e96e44dd",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "activity_id",
+                        "in": "path",
+                        "description": "ID of the activity",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "info activity": {
+                                                    "properties": {
+                                                        "course": {
+                                                            "type": "string",
+                                                            "example": "big data"
+                                                        },
+                                                        "activity": {
+                                                            "type": "string",
+                                                            "example": "read text"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "califications": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "calification 1": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 8
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "student not valid"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Activity has no grades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "activity has not calification"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/califications/{student_id}/course/{course_id}": {
+            "get": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Get all grades for a course for a student",
+                "operationId": "c8b4c8c45ea20fc1b16605b88bdcac48",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "course_id",
+                        "in": "path",
+                        "description": "ID of the course",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "info activity": {
+                                                    "properties": {
+                                                        "course": {
+                                                            "type": "string",
+                                                            "example": "big data"
+                                                        },
+                                                        "teacher": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "califications": {
+                                                    "properties": {
+                                                        "Activity 1": {
+                                                            "type": "object",
+                                                            "example": [
+                                                                8.5,
+                                                                10,
+                                                                0
+                                                            ]
+                                                        },
+                                                        "Activity 2": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 10
+                                                            }
+                                                        },
+                                                        "Activity 3": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 5.4
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "student not valid"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No grades found for the student",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "student has not calificators"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/califications/{id}": {
+            "get": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Get a calification by ID",
+                "operationId": "95d3a751c95f02395e91ac8aea1ea7c3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the calification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "activity_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "calification": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 9.5
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-06-01T12:00:00.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2023-06-01T12:00:00.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Calification not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "calification not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Update the value of a grade by ID",
+                "operationId": "30d11fcee4acf9bcf68d8a6adaf97a05",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the calification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "New calification value",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "value": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 9.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Calification updated successfully"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "value": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 9.5
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Calification not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Calification not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "califications"
+                ],
+                "summary": "Delete an calification by ID",
+                "operationId": "4e0b3e852433fad5171e8edde8d6f2aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the calification",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "calification deleted successfully"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "calification not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "calification not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
                                         }
                                     },
                                     "type": "object"
@@ -2142,6 +3894,619 @@
                                         "data": {
                                             "type": "object",
                                             "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedules": {
+            "post": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Create a new schedule for an activity",
+                "description": "Create a new schedule for a given activity, validating date and time, teacher availability, and activity schedule conflicts.",
+                "operationId": "createScheduleForActivity",
+                "requestBody": {
+                    "description": "Schedule data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "activity_id",
+                                    "teacher_id",
+                                    "start_hour",
+                                    "end_hour"
+                                ],
+                                "properties": {
+                                    "activity_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "teacher_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "start_hour": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-06-10 08:00:00"
+                                    },
+                                    "end_hour": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-06-10 09:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Schedule created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "activity_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "teacher_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "start_hour": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-06-10 08:00:00"
+                                        },
+                                        "end_hour": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-06-10 09:00:00"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "date invalid"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error creating schedule"
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedule/teacher/{id}": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Get schedule for a specific teacher by ID",
+                "description": "Retrieve the schedule for a teacher specified by their ID.",
+                "operationId": "getScheduleForTeacherId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the teacher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "course": {
+                                                        "type": "string",
+                                                        "example": "programacion 1"
+                                                    },
+                                                    "activity": {
+                                                        "type": "string",
+                                                        "example": "ver video"
+                                                    },
+                                                    "start_hour": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-10 08:00:00"
+                                                    },
+                                                    "end_hour": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-10 09:00:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Teacher not found or has no schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "teacher has not schedule"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedule/student/{id}": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Get schedule for a specific student by ID",
+                "description": "Retrieve the schedule for a student specified by their ID.",
+                "operationId": "getScheduleByStudentId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "course": {
+                                                        "type": "string",
+                                                        "example": "programacion 1"
+                                                    },
+                                                    "acticity": {
+                                                        "type": "string",
+                                                        "example": "ver video"
+                                                    },
+                                                    "name teacher": {
+                                                        "type": "string",
+                                                        "example": "Alberto Higuera"
+                                                    },
+                                                    "start_hour": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-10 08:00:00"
+                                                    },
+                                                    "end_hour": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-10 09:00:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User is not a student or has no schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "user is not student"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/schedule/{id}": {
+            "delete": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Delete schedule by ID",
+                "description": "Delete a schedule specified by its ID.",
+                "operationId": "deleteScheduleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "schedule was delete"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "schedule not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Update schedule by ID",
+                "description": "Update a schedule specified by its ID.",
+                "operationId": "updateScheduleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Schedule data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "start_hour",
+                                    "end_hour"
+                                ],
+                                "properties": {
+                                    "start_hour": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-06-10 08:00:00"
+                                    },
+                                    "end_hour": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-06-10 09:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Schedule updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "start_hour": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-10 08:00:00"
+                                                },
+                                                "end_hour": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-10 09:00:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "date is not valid"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "schedule not found"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error message"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
