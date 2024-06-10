@@ -42,10 +42,10 @@ class AuthController extends Controller
      *         required=true,
      *         description="User details",
      *         @OA\JsonContent(
-     *             required={"name", "email", "id_rol", "password"},
+     *             required={"name", "email", "rol_id", "password"},
      *             @OA\Property(property="name", type="string", example="John Doe"),
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *             @OA\Property(property="id_rol", type="integer", example=2),
+     *             @OA\Property(property="rol_id", type="integer", example=2),
      *             @OA\Property(property="password", type="string", example="password123")
      *         )
      *     ),
@@ -55,7 +55,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="John Doe"),
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *             @OA\Property(property="id_rol", type="integer", example=2),
+     *             @OA\Property(property="rol_id", type="integer", example=2),
      *             @OA\Property(property="password", type="string", example="password123"),
      *             @OA\Property(property="image_url", type="string", example="https://cloudfare?media01")
      *         )
@@ -197,7 +197,7 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
         
             if (Auth::attempt($credentials)) {
-                $user = Auth::Usermodel();
+                $user = Auth::user();
                 $token = $user->createToken('authToken')->plainTextToken;
                 $roles = [
                     1 => "admin",
@@ -209,7 +209,8 @@ class AuthController extends Controller
                     'message' => 'success',
                     'status' => 200,
                     'role' => $rolNombre,
-                    'data' => $request->all()
+                    'data' => ['user'=>$request->input('email'),
+                                'password'=>bcrypt($request->input('password'))]
                 ];
         
                 return response()->json($response)->header('Authorization', 'Bearer ' . $token);
