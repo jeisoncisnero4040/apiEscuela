@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usermodel;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Helpers\ImageManager;
 
 
@@ -23,7 +23,7 @@ class UserController extends Controller{
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="name", type="string", example="John Doe"),
      *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="id_rol", type="integer", example=1),
+     *                 @OA\Property(property="rol_id", type="integer", example=1),
      *                 @OA\Property(property="image_url", type="string", example="https://cloudinary?v237&"),
      *                 @OA\Property(property="created_at", type="string", format="date-time"),
      *                 @OA\Property(property="updated_at", type="string", format="date-time")

@@ -21,6 +21,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityFileController;
 use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\CalificationsController;
+use App\Http\Controllers\DetailFileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 
@@ -88,3 +89,14 @@ Route::post('/comments',[ActivitiescomentsController::class, 'createComment']);
 Route::get('/comments/activity/{id}',[ActivitiescomentsController::class, 'getAllCommentFromActivityId'])->where('id','\d+');
 
 Route::post('/files_activity',[ActivityFileController::class, 'addFileOrUrlToActivity']);
+Route::get('/files_activity/activity/{id}',[ActivityFileController::class, 'getAllFilesByActivityId'])->where('id','\d+');
+Route::get('/files_activity/{id}',[ActivityFileController::class, 'getActivityFileById'])->where('id','\d+');
+Route::delete('/files_activity/{id}',[ActivityFileController::class, 'deleteFileActivityById'])->where('id','\d+');
+Route::post('/files_activity/{id}',[ActivityFileController::class, 'changueFileForFileActivityId'])->where('id','\d+');
+Route::get('files_activity/{activityId}/by/{studentId}',[ActivityFileController::class,'getAllFilesForActivityByStudent'])
+    ->where('activityId','\d+')
+    ->where('studentId','\d+');
+
+Route::post('file_detail/{activityFileId}/by/{studentId}',[DetailFileController::class,'checkFileActivityByStudentId'])
+    ->where('activityFileId','\d+')
+    ->where('studentId','\d+');

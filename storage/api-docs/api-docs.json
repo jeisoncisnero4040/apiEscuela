@@ -1203,6 +1203,705 @@
                 }
             }
         },
+        "/api/files_activity/activity/{id}": {
+            "get": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Get all files for a specific activity.",
+                "operationId": "25ee6bca510c043c8365083a87ca7646",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the activity to get the files for.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of files for the specified activity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "File ID.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "activity_id": {
+                                                        "description": "Activity ID.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "file_url": {
+                                                        "description": "URL of the file.",
+                                                        "type": "string",
+                                                        "format": "url",
+                                                        "example": "https://example.com/file.pdf"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the file.",
+                                                        "type": "string",
+                                                        "example": "Description of the file"
+                                                    },
+                                                    "type_file": {
+                                                        "description": "file type",
+                                                        "type": "string",
+                                                        "example": "pdf"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Activity not found or no files associated with the activity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error details.",
+                                            "type": "string",
+                                            "example": "not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while processing the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Description of the internal error.",
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "'files_activity/{activityId}/by/{studentId}": {
+            "get": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Get all files related to a specific activity for a student.",
+                "operationId": "ce77056f508d3aaf4d243b0528cd5f0d",
+                "parameters": [
+                    {
+                        "name": "activityId",
+                        "in": "path",
+                        "description": "ID of the activity",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "studentId",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation. Returns the files related to the activity for the student.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID of the file.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "activity_id": {
+                                                        "description": "Activity ID.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "file_url": {
+                                                        "description": "URL of the file.",
+                                                        "type": "string",
+                                                        "example": "https://example.com/file.pdf"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the file.",
+                                                        "type": "string",
+                                                        "example": "Description of the file"
+                                                    },
+                                                    "type_file": {
+                                                        "description": "file type",
+                                                        "type": "string",
+                                                        "example": "pdf"
+                                                    },
+                                                    "was cheked": {
+                                                        "description": "was cheeknd by student",
+                                                        "type": "boolean",
+                                                        "example": "true"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to failed validation or business logic error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "description": "Validation or business logic error.",
+                                            "type": "string",
+                                            "example": "student or file activity not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No files found for the activity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error description.",
+                                            "type": "string",
+                                            "example": "not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/files_activity/{id}": {
+            "get": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Get a file by his id",
+                "operationId": "f22cfedc06ab336e7c257de0ad4c4216",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the activity to get the files for.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of files for the specified activity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "File ID.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "activity_id": {
+                                                        "description": "Activity ID.",
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "file_url": {
+                                                        "description": "URL of the file.",
+                                                        "type": "string",
+                                                        "format": "url",
+                                                        "example": "https://example.com/file.pdf"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the file.",
+                                                        "type": "string",
+                                                        "example": "Description of the file"
+                                                    },
+                                                    "type_file": {
+                                                        "description": "file type",
+                                                        "type": "string",
+                                                        "example": "pdf"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Activity not found or no files associated with the activity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error details.",
+                                            "type": "string",
+                                            "example": "not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while processing the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Description of the internal error.",
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Change the file or URL for a specific activity.",
+                "operationId": "4d6f31f00c2af03ccc1400b19fdad1ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the file activity to update.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "New file to upload. This field is optional and can be null if a URL is provided.",
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    },
+                                    "url": {
+                                        "description": "New URL to link. This field is optional and can be null if a file is provided.",
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://example.com/file.pdf",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The file or URL has been updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "description": "New URL of the file.",
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "https://example.com/newfile.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to validation or business logic error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "description": "Validation or business logic errors.",
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "File activity not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error details.",
+                                            "type": "string",
+                                            "example": "not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while processing the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Description of the internal error.",
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FilesActivities"
+                ],
+                "summary": "Delete a file associated with an activity by its ID.",
+                "operationId": "323c1cbd85565e403755f43727cca40a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the file activity to delete.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The file activity has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "activityFile was deleted successfully"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "File activity not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error details.",
+                                            "type": "string",
+                                            "example": "not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while trying to delete the file.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "error": {
+                                            "description": "Error details.",
+                                            "type": "string",
+                                            "example": "error trying delete file"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/advices": {
             "get": {
                 "tags": [
@@ -1855,7 +2554,7 @@
                                                 "format": "email",
                                                 "example": "john@example.com"
                                             },
-                                            "id_rol": {
+                                            "rol_id": {
                                                 "type": "integer",
                                                 "example": 1
                                             },
@@ -1919,7 +2618,7 @@
                                 "required": [
                                     "name",
                                     "email",
-                                    "id_rol",
+                                    "rol_id",
                                     "password"
                                 ],
                                 "properties": {
@@ -1932,7 +2631,7 @@
                                         "format": "email",
                                         "example": "john@example.com"
                                     },
-                                    "id_rol": {
+                                    "rol_id": {
                                         "type": "integer",
                                         "example": 2
                                     },
@@ -1962,7 +2661,7 @@
                                             "format": "email",
                                             "example": "john@example.com"
                                         },
-                                        "id_rol": {
+                                        "rol_id": {
                                             "type": "integer",
                                             "example": 2
                                         },
@@ -3888,6 +4587,135 @@
                                             "example": "Error message"
                                         },
                                         "status": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "file_detail/{activityFileId}/by/{studentId}": {
+            "post": {
+                "tags": [
+                    "DetailFilesActivities"
+                ],
+                "summary": "Check if a student has already checked a file activity and register the check if not.",
+                "operationId": "dfe3c843ff04373315090d9443f479d5",
+                "parameters": [
+                    {
+                        "name": "activityFileId",
+                        "in": "path",
+                        "description": "ID of the file activity to check",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "studentId",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The file activity check has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message.",
+                                            "type": "string",
+                                            "example": "created"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "activity_file_id": {
+                                                    "description": "ID of the activity file.",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "student_id": {
+                                                    "description": "ID of the student.",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request due to failed validation or business logic error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "bad request"
+                                        },
+                                        "error": {
+                                            "description": "Validation or business logic error.",
+                                            "type": "string",
+                                            "example": "student or file activity not found"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error while processing the request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message.",
+                                            "type": "string",
+                                            "example": "internal server error"
+                                        },
+                                        "error": {
+                                            "description": "Description of the internal error.",
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "description": "HTTP status code.",
                                             "type": "integer",
                                             "example": 500
                                         },
