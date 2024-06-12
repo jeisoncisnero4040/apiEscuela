@@ -29,10 +29,9 @@ use App\Http\Middleware\AdminCheck;
 use App\Models\ActivityFileModel;
 
 Route::post('/users', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/retrieve_password',[AuthController::class,'passwordRefresh']);
-route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+route::post('/logout',[AuthController::class,'logout']) ;
 
 Route::get('/users',[UserController::class,'get_users']);
 //->middleware(AdminCheck::class);

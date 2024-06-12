@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RetrievePassword;
 use App\Helpers\ImageManager;
+use App\Helpers\PasswordGenerator;
+use Illuminate\Support\Facades\DB;
+use App\constans\ResponseManager;
 
 /**
  * @OA\Info(
@@ -31,8 +34,15 @@ use App\Helpers\ImageManager;
 
  
 
-class AuthController extends Controller
-{
+class AuthController extends Controller{
+
+    protected $responseManager;
+
+    public function __construct(ResponseManager $responseManager)
+    {
+        $this->responseManager=$responseManager;
+    }
+
     /**
      * @OA\Post(
      *     path="/api/users",
@@ -268,6 +278,7 @@ class AuthController extends Controller
          * )
          */
     public function passwordRefresh(Request $request){
+    
     $email = $request->only('email');
     $user = Usermodel::where('email', $email)->first();
 
@@ -279,21 +290,15 @@ class AuthController extends Controller
             'data' => $email
         ], 404);
     }
+    $passwordGenerator=new PasswordGenerator();
+    $newPassword=$passwordGenerator->generatePassword();
 
-    $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    $lengthpassword = strlen($chars);
-    $new_password = '';
 
-    for ($i = 0; $i < 24; $i++) {
-        $index = rand(0, $lengthpassword - 1);
-        $new_password .= $chars[$index];
-    }
-
-    $user->password = bcrypt($new_password);
+    $user->password = bcrypt($newPassword);
     $user->save();
 
     try {
-        Mail::to($user->email)->send(new RetrievePassword($user->name,$new_password));
+        Mail::to($user->email)->send(new RetrievePassword($user->name,$newPassword));
     } catch (\Exception $e) {
         return response()->json([
             'message' => 'failed',
@@ -306,33 +311,47 @@ class AuthController extends Controller
     return response()->json([
         'message' => 'success',
         'status' => 200,
-        'new_password' => $new_password
+        'new_password' => $newPassword
     ]);
     }
     
     
-    public function logout(Request $request) {
-         
-        $user = $request->user();
 
-        if ($user) {
-            $user->currentAccessToken()->delete();
-            $response = [
-                'message' => 'Logged out successfully',
-                'status' => 200,
-            ];
     
-            return response()->json($response, 200);
-        } else {
-            $response = [
-                'message' => 'User not authenticated',
-                'status' => $request,
-            ];
+    public function logout(Request $request)
+    {
+        
+        $token = $request->header('Authorization');
     
-            return response()->json($response, 401);
+        
+        if (!$token) {
+            $data = [
+                'message' => 'failed',
+                'error' => 'user not logged',
+                'status' => 304,
+                'data' => []
+            ];
+            return response()->json($data, 304);
         }
-    }
     
-
-
+         
+        $tokenSplit = explode(' ', $token);
+    
+        
+        if (count($tokenSplit) != 2 || $tokenSplit[0] !== 'Bearer') {
+            $response=$this->responseManager->badRequest('invalid token');
+            return response()->json($response, 400);
+        }
+    
+ 
+        $tokenID = explode('|', $tokenSplit[1])[0];
+    
+ 
+        DB::table('personal_access_tokens')->where('id', (int)$tokenID)->delete();
+        $request->headers->remove('Authorization');
+    
+ 
+        $response = $this->responseManager->success($request);
+        return response()->json($response, 200);
+    }
 }
