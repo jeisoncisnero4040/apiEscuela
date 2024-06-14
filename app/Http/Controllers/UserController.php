@@ -6,9 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Usermodel;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ImageManager;
+use App\constans\ResponseManager;
+
+
 
 
 class UserController extends Controller{
+
+    protected $responseManager;
+
+    public function __construct(ResponseManager $responseManager){
+        $this->responseManager=$responseManager;
+    }
+
+
     /**
      * @OA\Get(
      *     path="/api/users",
@@ -57,7 +68,7 @@ class UserController extends Controller{
             return response()->json($data, 404);
         }
         
-            return response()->json($data, 200);  
+        return response()->json($data, 200);  
         
                 }
                 
@@ -251,6 +262,17 @@ class UserController extends Controller{
 
     public function updateUser($id, Request $request){
         $user = Usermodel::find($id);
+
+        $validator =Validator::make($request->all(),[
+            'password'=>'prohibited|string|min:8',
+            'image_url'=>'prohibited',
+            'email'=>'prohibited'
+        ]);
+
+        if($validator->fails()){
+            $response=$this->responseManager->badRequest($validator->errors());
+            return response()->json($response,400);     
+        }
         
         if (!$user) {
             $data = [
@@ -261,10 +283,6 @@ class UserController extends Controller{
             return response()->json($data, 404);    
         }
         $userData=$request->all();
-        if ($request->password){
-            $userData['password'] = bcrypt($request->password);
-        }
-        
         try {
         
             $user->update($userData);
@@ -400,6 +418,101 @@ class UserController extends Controller{
                 'data' => []
             ], 500);
         }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users/{id}/change_password",
+     *     summary="Change the password of a user",
+     *     tags={"users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the user",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="New password",
+     *         @OA\JsonContent(
+     *             required={"password"},
+     *             @OA\Property(property="password", type="string", example="newsecurepassword123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password changed successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Password changed successfully"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="rol_id", type="integer", example=2), 
+     *                 @OA\Property(property="email", type="string", example="johndoe@example.com"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-06-13T12:00:00Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-06-13T12:00:00Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Validation error"),
+     *             @OA\Property(property="status", type="integer", example=400),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User not found"),
+     *             @OA\Property(property="status", type="integer", example=404),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Server error"),
+     *             @OA\Property(property="error", type="string", example="Error message"),
+     *             @OA\Property(property="status", type="integer", example=500),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     )
+     * )
+     */
+    public function changePasswordByUserId($id, Request $request){
+
+        $user=Usermodel::find($id);
+        $validator =Validator::make($request->all(),[
+            'password'=>'required|string|min:8'
+        ]);
+
+        if($validator->fails()){
+            $response=$this->responseManager->badRequest($validator->errors());
+            return response()->json($response,400);     
+        }
+
+        if (!$user){
+            $response=$this->responseManager->notFound();
+            return response()->json($response,404);
+        }
+
+        try{
+            $user->update(['password' => bcrypt($request->input('password'))]);
+            $response=$this->responseManager->success($user);
+            return response()->json($response,200);
+        }catch(\Exception $e){
+            $response=$this->responseManager->serverError($e->getMessage());
+            return response()->json($response,400);
+        }
+
     }
 }
 

@@ -22,6 +22,8 @@ use App\Http\Controllers\ActivityFileController;
 use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\CalificationsController;
 use App\Http\Controllers\DetailFileController;
+use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 
@@ -39,6 +41,7 @@ Route::get('/users/{id}', [UserController::class, 'getUser'])->where('id', '\d+'
 Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->where('id', '\d+');
 Route::patch('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
 Route::post('/users/{id}/change_image',[UserController::class,'changeImageUser'])->where('id', '\d+');
+Route::post('/users/{id}/change_password',[UserController::class,'changePasswordByUserId'])->where('id', '\d+');
 
 Route::post('/courses' ,[CourseController::class, 'createCourse']);
 Route::get('/courses',[CourseController::class, 'getAllCourses']);
@@ -92,10 +95,22 @@ Route::get('/files_activity/activity/{id}',[ActivityFileController::class, 'getA
 Route::get('/files_activity/{id}',[ActivityFileController::class, 'getActivityFileById'])->where('id','\d+');
 Route::delete('/files_activity/{id}',[ActivityFileController::class, 'deleteFileActivityById'])->where('id','\d+');
 Route::post('/files_activity/{id}',[ActivityFileController::class, 'changueFileForFileActivityId'])->where('id','\d+');
-Route::get('files_activity/{activityId}/by/{studentId}',[ActivityFileController::class,'getAllFilesForActivityByStudent'])
+Route::get('/files_activity/{activityId}/by/{studentId}',[ActivityFileController::class,'getAllFilesForActivityByStudent'])
     ->where('activityId','\d+')
     ->where('studentId','\d+');
 
-Route::post('file_detail/{activityFileId}/by/{studentId}',[DetailFileController::class,'checkFileActivityByStudentId'])
+Route::post('/file_detail/{activityFileId}/by/{studentId}',[DetailFileController::class,'checkFileActivityByStudentId'])
     ->where('activityFileId','\d+')
     ->where('studentId','\d+');
+
+Route::post('/products',[ProductsController::class,'createProduct']);
+Route::get('/products',[ProductsController::class,'getAllProducts']);
+Route::get('/products/{id}',[ProductsController::class,'getProductById'])->where('id','\d+');
+Route::delete('/products/{id}',[ProductsController::class,'deleteProductById'])->where('id','\d+');
+Route::post('/products/{id}',[ProductsController::class,'updateProductById'])->where('id','\d+');
+
+Route::post('/payments',[PaymentsController::class,'registerPayment']);
+Route::get('/payments',[PaymentsController::class,'getAllPayments']);
+Route::get('/payments/{id}',[PaymentsController::class,'getPaymentById'])->where('id','\d+');
+Route::delete('/payments/{id}',[PaymentsController::class,'deletePaymentById'])->where('id','\d+');
+Route::post('/payments/{id}',[PaymentsController::class,'updatePaymentById'])->where('id','\d+');

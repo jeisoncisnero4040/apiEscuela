@@ -316,7 +316,43 @@ class AuthController extends Controller{
     }
     
     
-
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Logout user",
+     *     tags={"authentication"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully logged out",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Successfully logged out"),
+     *             @OA\Property(property="status", type="integer", example=200),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=304,
+     *         description="User not logged in",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User not logged in"),
+     *             @OA\Property(property="error", type="string", example="user not logged"),
+     *             @OA\Property(property="status", type="integer", example=304),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid token format",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Bad Request"),
+     *             @OA\Property(property="error", type="string", example="invalid token"),
+     *             @OA\Property(property="status", type="integer", example=400),
+     *             @OA\Property(property="data", type="object", example={})
+     *         )
+     *     )
+     * )
+     */
     
     public function logout(Request $request)
     {
