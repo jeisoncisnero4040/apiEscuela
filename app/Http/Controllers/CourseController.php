@@ -23,7 +23,7 @@ class CourseController extends Controller{
      *             @OA\Property(property="name_course", type="string", example="Course Name"),
      *             @OA\Property(property="teacher_id", type="integer", example=1),
      *             @OA\Property(property="description", type="string", example="Course Description"),
-     *             @OA\Property(property="image_url", type="string", example="cloudfire?v=73we")
+     *             @OA\Property(property="image", type="file")
      *         )
      *     ),
      *     @OA\Response(
@@ -74,7 +74,7 @@ class CourseController extends Controller{
             'name' => 'required',
             'teacher_id' => 'required',
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -593,7 +593,7 @@ class CourseController extends Controller{
 
     }
     /**
-     * @OA\Patch(
+     * @OA\Post(
      *     path="/api/courses/{id}",
      *     summary="Update course by ID",
      *     tags={"courses"},

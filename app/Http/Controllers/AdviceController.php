@@ -350,7 +350,7 @@ class AdviceController extends Controller{
                 'status'=>200,
                 'data'=>AdviceModel::find($id)
                ];
-               return response()->json($response,400);
+               return response()->json($response,200);
         }
         catch(\Exception $e){
             $response=[
@@ -477,7 +477,7 @@ class AdviceController extends Controller{
                 'status'=>200,
                 'data'=>AdviceModel::find($id)
                ];
-               return response()->json($response,400);
+               return response()->json($response,200);
         }
         catch(\Exception $e){
             $response=[

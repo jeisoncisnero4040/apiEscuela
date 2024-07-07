@@ -208,7 +208,7 @@ class ActivityController extends Controller{
             'status'=>200,
             'data'=>$activities
         ];
-        return response()->json($response,404);
+        return response()->json($response,200);
         
     }
     /**
@@ -480,11 +480,11 @@ class ActivityController extends Controller{
             $activityToDelete->delete();
             $response=[
                 'message'=>'actyvity deleted succesfull',
-                'error'=>'activity not found',
-                'status'=>404,
+
+                'status'=>200,
                  
             ];
-            return response()->json($response,404);
+            return response()->json($response,200);
         }
         catch(\Exception $e){
             $response=[
@@ -499,7 +499,7 @@ class ActivityController extends Controller{
 
     }
     /**
-     * @OA\Patch(
+     * @OA\Post(
      *     path="/api/activities/{id}",
      *     summary="Update activity by ID",
      *     tags={"activities"},
