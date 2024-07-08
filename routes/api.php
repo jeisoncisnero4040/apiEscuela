@@ -39,7 +39,7 @@ Route::get('/users',[UserController::class,'get_users']);
 //->middleware(AdminCheck::class);
 Route::get('/users/{id}', [UserController::class, 'getUser'])->where('id', '\d+');
 Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->where('id', '\d+');
-Route::patch('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
+Route::post('/users/{id}', [UserController::class, 'updateUser'])->where('id', '\d+');
 Route::post('/users/{id}/change_image',[UserController::class,'changeImageUser'])->where('id', '\d+');
 Route::post('/users/{id}/change_password',[UserController::class,'changePasswordByUserId'])->where('id', '\d+');
 
@@ -49,7 +49,7 @@ Route::get('/courses/{id}', [CourseController::class, 'getCourseById'])->where('
 Route::get('/courses/teacher/{id}', [CourseController::class, 'getCoursesByTeacherId'])->where('id', '\d+');
 Route::get('/courses/not_teacher/', [CourseController::class, 'getCoursesWithNullTeacher']);
 Route::delete('/courses/{id}', [CourseController::class, 'deleteCourse'])->where('id', '\d+');
-Route::patch('/courses/{id}', [CourseController::class, 'updateCourseById'])->where('id', '\d+');
+Route::post('/courses/{id}', [CourseController::class, 'updateCourseById'])->where('id', '\d+');
 Route::post('/courses/{id}/change_image',[CourseController::class,'changeImageCourse'])->where('id', '\d+');
 
 Route::post('/activities',[ActivityController::class, 'createActivity']);
@@ -57,7 +57,7 @@ Route::get('/activities',[ActivityController::class, 'getAllActivities']);
 Route::get('/activities/{id}', [ActivityController::class, 'getActivityById'])->where('id', '\d+');
 Route::get('/activities/course/{id}', [ActivityController::class, 'getActivitiesByCourseId'])->where('id', '\d+');
 Route::delete('/activities/{id}', [ActivityController::class, 'deleteActivityById'])->where('id', '\d+');
-Route::patch('/activities/{id}', [ActivityController::class, 'updateActivityById'])->where('id', '\d+');
+Route::post('/activities/{id}', [ActivityController::class, 'updateActivityById'])->where('id', '\d+');
 
 Route::post('/students',[StudentController::class, 'createStudent']);
 Route::get('/students',[StudentController::class, 'getAllActiviesStudents']);
@@ -74,6 +74,7 @@ Route::patch('/schedule/{id}',[ScheduleController::class,'updateScheduleById'])-
 Route::post('/advices',[AdviceController::class,'createAdvice']);
 Route::get('/advices',[AdviceController::class,'getAllAdvices']);
 Route::delete('/advices/{id}',[AdviceController::class,'deleteAdviceById'])->where('id','\d+');
+Route::post('/advices/{id}',[AdviceController::class,'updateAdviceById'])->where('id','\d+');
 Route::post('/advices/{id}/change_image',[AdviceController::class,'changeImageFromAdviceById'])->where('id','\d+');
 
 Route::post('/califications',[CalificationsController::class ,'addCalification']);
