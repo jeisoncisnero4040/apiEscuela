@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Usermodel;
 use App\Models\CourseModel;
 use App\Helpers\ImageManager;
+use Carbon\Carbon;
 
  
 class CourseController extends Controller{
@@ -23,7 +24,9 @@ class CourseController extends Controller{
      *             @OA\Property(property="name_course", type="string", example="Course Name"),
      *             @OA\Property(property="teacher_id", type="integer", example=1),
      *             @OA\Property(property="description", type="string", example="Course Description"),
-     *             @OA\Property(property="image", type="file")
+     *             @OA\Property(property="image", type="file"),
+     *             @OA\Property(property="start_date", type="string", format="date-time", example="2024-07-30T08:00:00Z"),
+     *             @OA\Property(property="end_date", type="string", format="date-time", example="2024-08-30T09:00:00Z")
      *         )
      *     ),
      *     @OA\Response(
@@ -31,8 +34,7 @@ class CourseController extends Controller{
      *         description="Course created successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="success"),
-     *             @OA\Property(property="status", type="integer", example=201),
-     *              
+     *             @OA\Property(property="status", type="integer", example=201)
      *         )
      *     ),
      *     @OA\Response(
@@ -51,8 +53,7 @@ class CourseController extends Controller{
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="error"),
      *             @OA\Property(property="error", type="string", example="teacher not found or not a teacher"),
-     *             @OA\Property(property="status", type="integer", example=404),
-     *              
+     *             @OA\Property(property="status", type="integer", example=404)
      *         )
      *     ),
      *     @OA\Response(
@@ -61,20 +62,19 @@ class CourseController extends Controller{
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Error creating course"),
      *             @OA\Property(property="errors", type="string"),
-     *             @OA\Property(property="status", type="integer", example=500),
-     *              
+     *             @OA\Property(property="status", type="integer", example=500)
      *         )
      *     )
      * )
      */
-
-
     public function createCourse(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'teacher_id' => 'required',
             'description' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'start_date' => 'required|date_format:d-m-Y H:i',
+            'end_date' => 'required|date_format:d-m-Y H:i',
         ]);
 
         if ($validator->fails()) {
@@ -108,6 +108,8 @@ class CourseController extends Controller{
                 'teacher_id' => $request->input('teacher_id'),
                 'description' => $request->input('description'),
                 'image_url'=>$imagePath,
+                'start_date' => Carbon::createFromFormat('d-m-Y H:i', $request->input('start_date')),
+                'end_date' => Carbon::createFromFormat('d-m-Y H:i', $request->input('end_date')),
             ]);
 
             $response = [

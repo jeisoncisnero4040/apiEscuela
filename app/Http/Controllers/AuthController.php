@@ -215,11 +215,15 @@ class AuthController extends Controller{
                     3 => "student"
                 ];
                 $rolNombre = $roles[$user->rol_id] ?? 'Unknown';
+                
+                if ($rolNombre!="teacher"){
+                    $user=$request->input('email');
+                }
                 $response = [
                     'message' => 'success',
                     'status' => 200,
-                    'role' => $rolNombre,
-                    'data' => ['user'=>$request->input('email'),
+                    'rol' => $rolNombre,
+                    'data' => ['user'=>$user,
                                 'password'=>bcrypt($request->input('password'))]
                 ];
         

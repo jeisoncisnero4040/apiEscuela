@@ -407,7 +407,7 @@ class ScheduleController extends Controller{
     }
 
     /**
-     * @OA\Patch(
+     * @OA\Post(
      *     path="/api/schedule/{id}",
      *     tags={"schedules"},
      *     summary="Update schedule by ID",
@@ -486,8 +486,8 @@ class ScheduleController extends Controller{
 
     public function updateSheduleById(Request $request, $id){
         $validator=Validator::make($request->all(),[
-            'start_hour' => 'nullable|date_format:d-m-Y H:i',
-            'end_hour' => 'nullable|date_format:d-m-Y H:i',
+            'start_hour' => 'required|date_format:d-m-Y H:i',
+            'end_hour' => 'required|date_format:d-m-Y H:i',
         ]);
         if ($validator->fails()){
             $response = [
@@ -521,7 +521,10 @@ class ScheduleController extends Controller{
             return response()->json($response, 404);
         }
         try{
-            $schedule->update($request->all());
+            $schedule->update([
+                'start_hour' => Carbon::createFromFormat('d-m-Y H:i', $request->input('start_hour')),
+                'end_hour' => Carbon::createFromFormat('d-m-Y H:i', $request->input('end_hour')),
+            ]);
             $response = [
                 'message' => 'success',
                 'status' => 200,
@@ -532,7 +535,7 @@ class ScheduleController extends Controller{
         }
         catch(\Exception $e){
             $response = [
-                'message' => 'success',
+                'message' => 'failed',
                 'error'=>$e->getMessage(),
                 'status' => 500,
                 'data' => []

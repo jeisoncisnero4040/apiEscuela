@@ -68,8 +68,8 @@ Route::delete('/students/{id}',[StudentController::class,'deleteStudentById'])->
 Route::post('/schedule',[ScheduleController::class,'CreateScheduleForActivity']);
 Route::get('/schedule/teacher/{id}',[ScheduleController::class,'getScheduleForTeacherId'])->where('id','\d+');
 Route::get('/schedule/student/{id}',[ScheduleController::class,'getScheduleByStudentId'])->where('id','\d+');
-Route::get('/schedule/{id}',[ScheduleController::class,'deleteScheduleById'])->where('id','\d+');
-Route::patch('/schedule/{id}',[ScheduleController::class,'updateScheduleById'])->where('id','\d+');
+Route::delete('/schedule/{id}',[ScheduleController::class,'deleteScheduleById'])->where('id','\d+');
+Route::post('/schedule/{id}',[ScheduleController::class,'updateSheduleById'])->where('id','\d+');
 
 Route::post('/advices',[AdviceController::class,'createAdvice']);
 Route::get('/advices',[AdviceController::class,'getAllAdvices']);

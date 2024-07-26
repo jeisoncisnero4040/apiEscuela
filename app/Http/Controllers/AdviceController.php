@@ -247,7 +247,7 @@ class AdviceController extends Controller{
         }
     }
     /**
-     * @OA\patch(
+     * @OA\Post(
      *     path="/api/advices/{Id}",
      *     tags={"advices"},
      *     summary="Update an advice by ID",

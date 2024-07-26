@@ -16,6 +16,8 @@ class CourseModel extends Model
         "teacher_id",
         "description",
         "image_url",
+        "end_date",
+        "start_date",
         
     ];
 }
