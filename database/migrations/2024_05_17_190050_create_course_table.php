@@ -20,6 +20,7 @@ return new class extends Migration
         $table->string('image_url')->nullable();
         $table->datetime('start_date');
         $table->datetime('end_date');
+        $table -> boolean('is_finishing');
         $table->timestamps();
     });
         }

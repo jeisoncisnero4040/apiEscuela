@@ -21,14 +21,16 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityFileController;
 use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\CalificationsController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\DetailFileController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 
 use App\Http\Middleware\AdminCheck;
-use App\Models\ActivityFileModel;
+
 
 Route::post('/users', [AuthController::class, 'register']);
 Route::post('/login',[AuthController::class,'login']);
@@ -87,6 +89,7 @@ Route::get('/califications/{studentId}/course/{courseId}', [CalificationsControl
 Route::get('/califications/{id}',[CalificationsController::class ,'getCalificationById'])->where('id','\d+');
 Route::delete('/califications/{id}',[CalificationsController::class ,'deleteCalificationById'])->where('id','\d+');
 Route::post('/califications/{id}',[CalificationsController::class ,'updateCalificationById'])->where('id','\d+');
+//para el docente un endpoint donde muestre todas las calificaciones de curso
 
 Route::post('/comments',[ActivitiescomentsController::class, 'createComment']);
 Route::get('/comments/activity/{id}',[ActivitiescomentsController::class, 'getAllCommentFromActivityId'])->where('id','\d+');
@@ -115,3 +118,11 @@ Route::get('/payments',[PaymentsController::class,'getAllPayments']);
 Route::get('/payments/{id}',[PaymentsController::class,'getPaymentById'])->where('id','\d+');
 Route::delete('/payments/{id}',[PaymentsController::class,'deletePaymentById'])->where('id','\d+');
 Route::post('/payments/{id}',[PaymentsController::class,'updatePaymentById'])->where('id','\d+');
+
+Route::post('/permissions',[PermissionsController::class,'createPermission']);
+Route::get('/permissions',[PermissionsController::class,'getAllPermissions']);
+Route::get('/permissions/{id}',[PermissionsController::class,'getPermissionById'])->where('id','\d+');
+Route::post('/permissions/{id}/extend',[PermissionsController::class,'addDaysToPermision'])->where('id','\d+');
+Route::delete('/permissions/{id}',[PermissionsController::class,'deletePermissionById'])->where('id','\d+');
+
+Route::post('/certifications',[CertificationController::class,'createCertification']);
