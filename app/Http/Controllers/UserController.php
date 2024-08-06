@@ -7,9 +7,7 @@ use App\Models\Usermodel;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ImageManager;
 use App\constans\ResponseManager;
-
-
-
+use App\Models\PermisionModel;
 
 class UserController extends Controller{
 
@@ -56,9 +54,9 @@ class UserController extends Controller{
    
     public function get_users(){
 
-        $data = Usermodel::select('id', 'name', 'email', 'rol_id' ,'created_at', 'updated_at','image_url')->get();
+        $users = Usermodel::select('id', 'name', 'email', 'rol_id' ,'created_at', 'updated_at','image_url')->get();
 
-        if ($data->isEmpty()) {  
+        if ($users->isEmpty()) {  
             $data = [
                 'message' => 'error',
                 'errors' => 'data not found',
@@ -67,10 +65,22 @@ class UserController extends Controller{
             ];
             return response()->json($data, 404);
         }
-        
-        return response()->json($data, 200);  
-        
+        if (!PermisionModel::where("name", "storage")->exists()){
+            foreach ($users as $user) {
+                try{
+                    $imageManager = new ImageManager(null);
+                    $imageContent = $imageManager->getImageFromLocal($user->image_url);
+                    $user->image_url = $imageContent;
+                }catch(\Exception $e){
+
                 }
+                
+            }
+        }
+        $response=$this->responseManager->success($users);
+        return response()->json($response, 200);  
+        
+    }
                 
     /**
      * @OA\Get(
@@ -128,6 +138,20 @@ class UserController extends Controller{
             return response()->json($data,404);
         }
         unset($user->password);
+
+        $filename = $user->image_url;
+        if ($filename && !PermisionModel::where("name", "storage")->exists()) {
+            try {
+
+                $imageManager = new ImageManager(null);
+                $imageContent = $imageManager->getImageFromLocal($filename);
+                $user->image_url = $imageContent;
+
+            } catch (\Exception $e) {
+                $response = $this->responseManager->serverError($e->getMessage());
+                return response()->json($response, 500);
+            }
+        }
         $data = [
             "message" => 'success',
             'status' => 200,
@@ -399,7 +423,10 @@ class UserController extends Controller{
 
         try {
             $imageManager = new ImageManager($request->file('image'));
-            $newUrlImage = $imageManager->changeImage($user->image_url);
+            
+            $newUrlImage = PermisionModel::where("name","storage")->exists()
+                            ?$imageManager->changeImage($user->image_url)
+                            :$imageManager->changeImageInLocal($user->image_url);
 
             $user->update(['image_url'=>$newUrlImage]);
             return response()->json([

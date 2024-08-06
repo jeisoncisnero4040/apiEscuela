@@ -12,6 +12,7 @@ use App\Helpers\ImageManager;
 use App\Helpers\PasswordGenerator;
 use Illuminate\Support\Facades\DB;
 use App\constans\ResponseManager;
+use App\Models\PermisionModel;
 
 /**
  * @OA\Info(
@@ -114,11 +115,10 @@ class AuthController extends Controller{
         try {
             
             $imageManager = new ImageManager($request->file('image'));
-            $imagePath = $imageManager->saveImage();
-
+            $imagePath = PermisionModel::where("name", "storage")->exists() 
+             ? $imageManager->saveImage() 
+             : $imageManager->saveImageInLocal();
             
-
-    
         $user = Usermodel::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),

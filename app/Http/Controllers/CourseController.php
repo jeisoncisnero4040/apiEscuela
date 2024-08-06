@@ -1,15 +1,26 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\constans\ResponseManager;
+use App\Helpers\DateManager;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Usermodel;
 use App\Models\CourseModel;
 use App\Helpers\ImageManager;
+use App\Models\PermisionModel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
  
 class CourseController extends Controller{
+
+    protected $responseManager;
+    public function __construct(ResponseManager $responseManager)
+    {
+        $this->responseManager=$responseManager;
+    }
+
 
     /**
      * @OA\Post(
@@ -68,66 +79,85 @@ class CourseController extends Controller{
      * )
      */
     public function createCourse(Request $request){
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'teacher_id' => 'required',
-            'description' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'start_date' => 'required|date_format:d-m-Y H:i',
-            'end_date' => 'required|date_format:d-m-Y H:i',
+    
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'teacher_id' => 'required|exists:users,id',
+        'description' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'start_date' => 'required|date_format:d-m-Y H:i',
+        'end_date' => 'required|date_format:d-m-Y H:i',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation error',
+            'error' => $validator->errors(),
+            'status' => 400,
+            'data' => [],
+        ], 400);
+    }
+
+ 
+    $user = Usermodel::find($request->input('teacher_id'));
+    if (!$user || $user->rol_id != 2) {
+        return response()->json([
+            'message' => 'error',
+            'error' => 'Teacher not found or not a teacher',
+            'status' => 404,
+            'data' => [],
+        ], 404);
+    }
+
+ 
+    $start_date = $request->input('start_date');
+    $end_date = $request->input('end_date');
+    $dateChecker = new DateManager();
+    if (!$dateChecker->verificateIfDateIsValid($start_date, $end_date)) {
+        return response()->json([
+            'message' => 'failed',
+            'error' => 'Dates are not valid',
+            'status' => 400,
+            'data' => [],
+        ], 400);
+    }
+
+    try {
+        
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imageManager = new ImageManager($request->file('image'));
+            $imagePath = PermisionModel::where('name', 'storage')->exists()
+                ? $imageManager->saveImage()
+                : $imageManager->saveImageInLocal();
+        }
+
+     
+        $course = CourseModel::create([
+            'name' => $request->input('name'),
+            'teacher_id' => $request->input('teacher_id'),
+            'description' => $request->input('description'),
+            'image_url' => $imagePath,
+            'start_date' => Carbon::createFromFormat('d-m-Y H:i', $start_date),
+            'end_date' => Carbon::createFromFormat('d-m-Y H:i', $end_date),
+            'is_finishing' => false,
         ]);
 
-        if ($validator->fails()) {
-            $response = [
-                'message' => 'error',
-                'error' => $validator->errors(),
-                'status' => 400,
-                'data' => [],
-            ];
-            return response()->json($response, 400);
-        }
-
-        $user = Usermodel::find($request->input('teacher_id'));
-        if (!$user || $user->rol_id!= 2) {
-            $response = [
-                'message' => 'error',
-                'error' => 'teacher not found or not a teacher',
-                'status' => 404,
-                'data' => $user->all(),
-            ];
-            return response()->json($response, 404);
-        }
-
-        try {
-
-            $imageManager = new ImageManager($request->file('image'));
-            $imagePath = $imageManager->saveImage();
-            
-            $course = CourseModel::create([
-                'name' => $request->input('name'),
-                'teacher_id' => $request->input('teacher_id'),
-                'description' => $request->input('description'),
-                'image_url'=>$imagePath,
-                'start_date' => Carbon::createFromFormat('d-m-Y H:i', $request->input('start_date')),
-                'end_date' => Carbon::createFromFormat('d-m-Y H:i', $request->input('end_date')),
-            ]);
-
-            $response = [
-                'message' => 'success',
-                'status' => 201,
-                'data' => $course,
-            ];
-
-            return response()->json($response, 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error creating course',
-                'errors' => $e->getMessage(),
-                'status' => 500,
-                'data' => []
-            ], 500);
-        }
+        return response()->json([
+            'message' => 'success',
+            'status' => 201,
+            'data' => $course,
+        ], 201);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Error creating course',
+            'errors' => $e->getMessage(),
+            'status' => 500,
+            'data' => [],
+        ], 500);
     }
+}
+
 
     /**
      * @OA\Get(
@@ -192,24 +222,29 @@ class CourseController extends Controller{
      * )
      */
     
-    public function getAllCourses(){
-        $courses=CourseModel::all();
+     public function getAllCourses(){
+ 
+        $courses = CourseModel::all();
+
         if($courses->isEmpty()){
-            $response=[
-                'message'=>'Courses not found',
-                'status'=>404,
-                'data'=>[],
-            ];
-            return response()->json($response,200);
+            $response =$this->responseManager->notFound();
+            return response()->json($response, 404);
         }
-        $response=[
-            'message'=>'success',
-            'status'=>200,
-            'data'=>$courses,
-        ];
-        return response()->json($response,200);
+    
+        if (!PermisionModel::where("name", "storage")->exists()){
+            foreach ($courses as $course) {
+                try{
+                    $imageManager = new ImageManager(null);
+                    $imageContent = $imageManager->getImageFromLocal($course->image_url);
+                    $course->image_url = $imageContent;
+                }catch(\Exception $e){
 
-
+                }
+                
+            }
+        }
+        $response = $this->responseManager->success($courses);
+        return response()->json($response, 200);
     }
 
     /**
@@ -244,13 +279,13 @@ class CourseController extends Controller{
      *                 property="data",
      *                 type="array",
      *                 @OA\Items(
-         *                 @OA\Property(property="id", type="integer", example=1),
-         *                 @OA\Property(property="name_course", type="string", example="big data"),
-         *                 @OA\Property(property="teacher_id", type="integer",   example="2"),
-         *                 @OA\Property(property="description", type="string", example="curso big data"),
-         *                 @OA\Property(property="created_at", type="string", format="date-time"),
-         *                 @OA\Property(property="updated_at", type="string", format="date-time")
-         *             )
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name_course", type="string", example="big data"),
+     *                 @OA\Property(property="teacher_id", type="integer",   example="2"),
+     *                 @OA\Property(property="description", type="string", example="curso big data"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             )
      *             )
      *         )
      *     ),
@@ -281,24 +316,40 @@ class CourseController extends Controller{
      * )
      */
 
-    public function getCourseById($id){
-        $course=CourseModel::find($id);
-        if(!$course){
-            $response=[
-                'message'=>'Course not found',
-                'status'=>404,
-                'data'=>[],
-            ];
-            return response()->json($response,200);
+     public function getCourseById($id) {
+        $course = CourseModel::find($id);
+    
+        if (!$course) {
+            return response()->json([
+                'message' => 'Course not found',
+                'status' => 404,
+                'data' => [],
+            ], 404);
         }
-        $response=[
-            'message'=>'success',
-            'status'=>200,
-            'data'=>$course,
-        ];
-        return response()->json($response,200);
+    
+        $filename = $course->image_url;
+        if ($filename && !PermisionModel::where("name", "storage")->exists()) {
+            try {
 
+                $imageManager = new ImageManager(null);
+                $imageContent = $imageManager->getImageFromLocal($filename);
+                $course->image_url = $imageContent;
+
+            } catch (\Exception $e) {
+                $response = $this->responseManager->serverError($e->getMessage());
+                return response()->json($response, 500);
+            }
+        }
+    
+        return response()->json([
+            'message' => 'success',
+            'status' => 200,
+            'data' => $course,
+        ], 200);
     }
+    
+    
+    
     /**
      * @OA\Get(
      *     path="/api/courses/teacher/{id}",
@@ -805,7 +856,10 @@ class CourseController extends Controller{
 
         try {
             $imageManager = new ImageManager($request->file('image'));
-            $newUrlImage = $imageManager->changeImage($course->image_url);
+
+            $newUrlImage = PermisionModel::where("name","storage")->exists()
+                            ?$imageManager->changeImage($course->image_url)
+                            :$imageManager->changeImageInLocal($course->image_url);
 
             $course->update(['image_url'=>$newUrlImage]);
             return response()->json([

@@ -464,6 +464,7 @@ class StudentController extends Controller
 
         foreach ($students as $student) {
             $infoUser = Usermodel::find($student['user_id']);
+            $infoCourse=CourseModel::find($id);
             if ($infoUser) {
                 $infoUser->makeHidden(['password', 'created_at', 'updated_at']);
             }
@@ -471,8 +472,9 @@ class StudentController extends Controller
              
 
             $studentData = [
-                'id' => $student['id'],
+                'studen_id' => $student['id'],
                 'user' => $infoUser,
+                'course'=>$infoCourse,
                  
             ];
 

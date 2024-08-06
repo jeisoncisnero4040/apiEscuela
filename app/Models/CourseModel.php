@@ -18,6 +18,7 @@ class CourseModel extends Model
         "image_url",
         "end_date",
         "start_date",
+        "is_finishing"
         
     ];
 }

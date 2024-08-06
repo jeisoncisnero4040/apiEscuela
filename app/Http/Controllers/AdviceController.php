@@ -6,6 +6,7 @@ use App\Models\AdviceModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ImageManager;
+use App\Models\PermisionModel;
 
 class AdviceController extends Controller{
     /**
@@ -82,7 +83,9 @@ class AdviceController extends Controller{
         try {
             
             $imageManager = new ImageManager($request->file('image'));
-            $imagePath = $imageManager->saveImage();
+            $imagePath = PermisionModel::where("name","storage")->exists()
+                        ?$imageManager->saveImage()
+                        :$imageManager->saveImageInLocal();
 
             
 
@@ -160,6 +163,18 @@ class AdviceController extends Controller{
                 'data'=>[]
             ];
             return response()->json($response,404);
+        }
+        if (!PermisionModel::where("name", "storage")->exists()){
+            foreach ($advices as $advice) {
+                try{
+                    $imageManager = new ImageManager(null);
+                    $imageContent = $imageManager->getImageFromLocal($advice->image_url);
+                    $advice->image_url = $imageContent;
+                }catch(\Exception $e){
+
+                }
+                
+            }
         }
         $response=[
             'message'=>'succes',
@@ -468,7 +483,9 @@ class AdviceController extends Controller{
         }
         try{
             $imageManager=new ImageManager($request->file('image'));
-            $newImagePath=$imageManager->changeImage($advice->image_url);
+            $newImagePath=PermisionModel::where("name","storage")->exists()
+                            ?$imageManager->changeImage($advice->image_url)
+                            :$imageManager->changeImageInLocal($advice->image_url);
             
             $advice->update(['image_url'=>$newImagePath]);
             
